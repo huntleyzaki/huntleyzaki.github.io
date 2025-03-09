@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>huntleyzaki.dev</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #dots-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 2rem;
+            background: rgba(15, 15, 15, 0.2);
+            backdrop-filter: blur(2px);
+            border-radius: 15px;
+            margin: 2rem auto 0;
+            z-index: 2;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #ff006e;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(255, 0, 110, 0.5);
+            animation: fadeIn 1s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+            color: #ff006e;
+            text-shadow: 0 0 15px rgba(255, 0, 110, 0.4);
+        }
+
+        .hero h2 {
+            color: #666;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .roles {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .role-tag {
+            background: rgba(34, 34, 34, 0.8);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .projects {
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out 0.7s forwards;
+            opacity: 0;
+        }
+
+        .project-card {
+            background: rgba(17, 17, 17, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skills {
+            margin: 2rem 0;
+            padding: 1.5rem 0;
+            animation: fadeIn 1s ease-out 0.9s forwards;
+            opacity: 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-item {
+            background: rgba(24, 24, 24, 0.8);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 3rem 0 1.5rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out 1.1s forwards;
+            opacity: 0;
+        }
+
+        .social-link {
+            background: rgba(34, 34, 34, 0.8);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+            border: 2px solid #ff006e;
+        }
+
+        .social-link:hover {
+            background: #ff006e;
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+
+        .social-link i {
+            font-size: 1.2rem;
+        }
+
+        .games-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .game {
+            width: 45%;
+            background: rgba(34, 34, 34, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #ff006e;
+        }
+
+        .game canvas {
+            display: block;
+            margin: 0 auto;
+            background: #222;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .role-tag {
+                padding: 0.6rem 1.2rem;
+            }
+
+            .social-link {
+                padding: 10px 25px;
+            }
+
+            .games-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .game {
+                width: 100%;
+            }
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 15, 0.2);
+            backdrop-filter: blur(2px);
+            width: 100%;
+        }
+
+.volume-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(34, 34, 34, 0.8);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(255, 0, 110, 0.4);
+}
+
+.volume-control input[type="range"] {
+    -webkit-appearance: none;
+    width: 120px;
+    height: 8px;
+    background: linear-gradient(to right, #ff006e var(--progress), rgba(255, 255, 255, 0.2) var(--progress));
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #ff006e;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+    transition: transform 0.2s;
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #ff006e;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+    transition: transform 0.2s;
+}
+
+.volume-control input[type="range"]::-moz-range-progress {
+    background-color: #ff006e;
+    height: 8px;
+    border-radius: 5px;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover,
+.volume-control input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
+
+.volume-control input[type="range"]:active::-webkit-slider-thumb,
+.volume-control input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.3);
+}
+
+    /* Делаем ползунок более отзывчивым при перетаскивании */
+    .volume-control input[type="range"]:active::-webkit-slider-thumb {
+        transform: scale(1.3);
+    }
+
+    .volume-control input[type="range"]:active::-moz-range-thumb {
+        transform: scale(1.3);
+    }   
+        /* Стили для кнопки запуска музыки */
+        #play-music {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: #ff006e;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    button[id^="restart-"] {
+    background: #ff006e;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 0, 110, 0.4);
+    display: block;
+    margin: 10px auto;
+}
+
+button[id^="restart-"]:hover {
+    background: #ff3385;
+    box-shadow: 0 6px 15px rgba(255, 0, 110, 0.6);
+    transform: translateY(-3px);
+}
+
+button[id^="restart-"]:active {
+    background: #e6005c;
+    transform: translateY(0);
+}
+
+        /* Добавляем стили для кнопок и контейнера мини-игр */
+        .game-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .game-button {
+            background: rgba(34, 34, 34, 0.8);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid #ff006e;
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+            cursor: pointer;
+        }
+
+        .game-button:hover {
+            background: #ff006e;
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+
+        #games-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            width: 100%;
+            display: none; /* Изначально скрыт */
+        }
+
+        .game {
+            width: 45%;
+            background: rgba(34, 34, 34, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none; /* Изначально скрыты */
+        }
+
+        .game.active {
+            display: block; /* Показываем активную мини-игру */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="dots-canvas"></canvas>
+    
+    <div class="container">
+        <button id="language-toggle" style="position: absolute; top: 1rem; right: 1rem; background: #ff006e; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">English</button>
+
+        <div class="avatar">
+            <img src="https://www.gifs.nl//media/dota-2-gifs-jRYwaU.gif" alt="Avatar">
+        </div>
+
+        <section class="hero">
+            <h1>huntleyzaki</h1>
+            <h2>huntleyzaki.dev</h2>
+            <div class="roles">
+                <span class="role-tag">Разработчик</span>
+                <span class="role-tag">Системный администратор</span>
+                <span class="role-tag">Помощник</span>
+            </div>
+        </section>
+
+        <!-- Кнопки для раскрытия мини-игр -->
+        <div class="game-buttons">
+            <button id="show-minesweeper" class="game-button">Показать Сапер</button>
+            <button id="show-snake" class="game-button">Показать Змейку</button>
+        </div>
+
+        <!-- Контейнер для мини-игр, изначально скрытый -->
+        <div id="games-container">
+            <div id="minesweeper-game" class="game">
+                <h3>Сапер</h3>
+                <canvas id="minesweeper" width="200" height="200"></canvas>
+                <button id="restart-minesweeper" style="margin-top: 10px;">Перезапустить</button>
+            </div>
+
+            <div id="snake-game" class="game">
+                <h3>Змейка (ПК)</h3>
+                <canvas id="snake" width="200" height="200"></canvas>
+                <button id="restart-snake" style="margin-top: 10px;">Перезапустить</button>
+            </div>
+
+            <div class="game">
+                <h3>Змейка (ПК)</h3>
+                <canvas id="snake" width="200" height="200"></canvas>
+                <button id="restart-snake" style="margin-top: 10px;">Перезапустить</button>
+            </div>
+        </div>
+
+        <section class="projects">
+            <div class="project-card">
+                <h3>Разработчик ботов</h3>
+                <p>Я создаю ботов для Discord и Telegram для различных функций.</p>
+            </div>
+
+            <div class="project-card">
+                <h3>Веб-разработчик</h3>
+                <p>У меня есть навыки создания сайтов для различных видов деятельности.</p>
+            </div>
+
+            <div class="project-card">
+                <h3>Discord сервер</h3>
+                <p>Я создам кастомизированный Discord сервер для вашего удобства.</p>
+            </div>
+
+            <div class="project-card">
+                <h3>Вебхуки</h3>
+                <p>При необходимости, я могу сделать различные вебхуки для вашего Discord сервера.</p>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2>Навыки</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <h3>HTML/CSS</h3>
+                    <p>Веб-разработка</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Python</h3>
+                    <p>Программирование</p>
+                </div>
+                <div class="skill-item">
+                    <h3>С#</h3>
+                    <p>Программирование</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Креативность</h3>
+                    <p>Создание серверов</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Опыт с RPC</h3>
+                    <p>Кастомный RPC для Discord</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Скоро...</h3>
+                </div>
+            </div>
+        </section>
+
+        <div class="social-links">
+            <a href="https://t.me/huntleyzaki" target="_blank" class="social-link">
+                Telegram <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://discord.com/users/681499145034399759" target="_blank" class="social-link">
+                Discord <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://tiktok.com/@huntleyzaki" target="_blank" class="social-link">
+                TikTok <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://steamcommunity.com/id/huntleyzaki/с" target="_blank" class="social-link">
+                Steam <i class="fab fa-steam"></i>
+            </a>
+            <a href="https://github.com/huntleyzaki" target="_blank" class="social-link">
+                GitHub <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 huntleyzaki.dev. Все права защищены.</p>
+    </footer>
+
+    <audio id="background-music" loop>
+        <source src="
+https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/download_music/2022/03/vladimir-zhdamirov-koroleva-neba.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио элемент.
+    </audio>
+
+<div class="volume-control">
+    <label for="volume">Громкость:</label>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.1">
+</div>
+
+    <button id="play-music">Включить музыку</button>
+
+    <script>
+        const languageToggle = document.getElementById('language-toggle');
+const elementsToTranslate = {
+    'hero h1': { en: 'huntleyzaki', ru: 'huntleyzaki' },
+    'hero h2': { en: 'huntleyzaki.dev', ru: 'huntleyzaki.dev' },
+    '.role-tag:nth-child(1)': { en: 'Developer', ru: 'Разработчик' },
+    '.role-tag:nth-child(2)': { en: 'System Admin', ru: 'Системный администратор' },
+    '.role-tag:nth-child(3)': { en: 'Helper', ru: 'Помощник' },
+    '.game h3:nth-child(1)': { en: 'Minesweeper', ru: 'Сапер' },
+    '.game h3:nth-child(2)': { en: 'Snake (PC)', ru: 'Змейка (ПК)' },
+    '#restart-minesweeper': { en: 'Restart', ru: 'Перезапустить' },
+    '#restart-snake': { en: 'Restart', ru: 'Перезапустить' },
+    '.project-card:nth-child(1) h3': { en: 'Bot Developer', ru: 'Разработчик ботов' },
+    '.project-card:nth-child(1) p': { en: 'I am creating bots for Discord and Telegram for various functions.', ru: 'Я создаю ботов для Discord и Telegram для различных функций.' },
+    '.project-card:nth-child(2) h3': { en: 'Web Developer', ru: 'Веб-разработчик' },
+    '.project-card:nth-child(2) p': { en: 'I have skills in creating websites for various types of activities.', ru: 'У меня есть навыки создания сайтов для различных видов деятельности.' },
+    '.project-card:nth-child(3) h3': { en: 'Discord Server', ru: 'Discord сервер' },
+    '.project-card:nth-child(3) p': { en: 'I will create a customized Discord server for your convenient use.', ru: 'Я создам кастомизированный Discord сервер для вашего удобства.' },
+    '.project-card:nth-child(4) h3': { en: 'Webhooks', ru: 'Вебхуки' },
+    '.project-card:nth-child(4) p': { en: 'If necessary, I can make various webhooks for your Discord server.', ru: 'При необходимости, я могу сделать различные вебхуки для вашего Discord сервера.' },
+    '.skills h2': { en: 'Skills', ru: 'Навыки' },
+    '.skill-item:nth-child(1) h3': { en: 'HTML/CSS', ru: 'HTML/CSS' },
+    '.skill-item:nth-child(1) p': { en: 'Web Development', ru: 'Веб-разработка' },
+    '.skill-item:nth-child(2) h3': { en: 'Python', ru: 'Python' },
+    '.skill-item:nth-child(2) p': { en: 'Programming', ru: 'Программирование' },
+    '.skill-item:nth-child(3) h3': { en: 'C#', ru: 'C#' },
+    '.skill-item:nth-child(3) p': { en: 'Programming', ru: 'Программирование' },
+    '.skill-item:nth-child(4) h3': { en: 'Creative', ru: 'Креативность' },
+    '.skill-item:nth-child(4) p': { en: 'Creation servers', ru: 'Создание серверов' },
+    '.skill-item:nth-child(5) h3': { en: 'RPC experience', ru: 'Опыт с RPC' },
+    '.skill-item:nth-child(5) p': { en: 'Custom RPC for Discord', ru: 'Кастомный RPC для Discord' },
+    '.skill-item:nth-child(6) h3': { en: 'Coming Soon...', ru: 'Скоро...' },
+    'footer p': { en: '© 2025 huntleyzaki.dev. All rights reserved.', ru: '© 2025 huntleyzaki.dev. Все права защищены.' },
+    '#language-toggle': { en: 'Русский', ru: 'English' },
+    '#show-minesweeper': { en: 'Show Minesweeper', ru: 'Показать Сапер' },
+    '#show-snake': { en: 'Show Snake', ru: 'Показать Змейку' },
+};
+
+        let currentLanguage = 'ru';
+
+        languageToggle.addEventListener('click', () => {
+            currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+            languageToggle.textContent = currentLanguage === 'en' ? 'Русский' : 'English';
+            Object.keys(elementsToTranslate).forEach(selector => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.textContent = elementsToTranslate[selector][currentLanguage];
+                }
+            });
+        });
+
+        const canvas = document.getElementById('dots-canvas');
+        const ctx = canvas.getContext('2d');
+        let dots = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Dot {
+            constructor() {
+                this.reset();
+                this.alpha = Math.random() * 0.6 + 0.4;
+                this.size = Math.random() * 1 + 2;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+            }
+
+            update() {
+                this.x += Math.cos(this.angle) * this.speedX;
+                this.y += Math.sin(this.angle) * this.speedY;
+
+                if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 0, 110, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            resizeCanvas();
+            dots = Array(300).fill().map(() => new Dot());
+            window.addEventListener('resize', resizeCanvas);
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dots.forEach(dot => {
+                dot.update();
+                dot.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        init();
+
+        const snakeCanvas = document.getElementById('snake');
+        const snakeCtx = snakeCanvas.getContext('2d');
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let dx = 0;
+        let dy = 0;
+        let gameOver = false;
+
+        function drawSnake() {
+            snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+            snakeCtx.fillStyle = '#00ff88';
+            snake.forEach(segment => snakeCtx.fillRect(segment.x * 10, segment.y * 10, 10, 10));
+            snakeCtx.fillStyle = '#ff006e';
+            snakeCtx.fillRect(food.x * 10, food.y * 10, 10, 10);
+        }
+
+        function moveSnake() {
+            if (gameOver) return;
+
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            if (head.x < 0 || head.x >= snakeCanvas.width / 10 || head.y < 0 || head.y >= snakeCanvas.height / 10) {
+                gameOver = true;
+                alert('Game Over!');
+                return;
+            }
+
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver = true;
+                    alert('Game Over!');
+                    return;
+                }
+            }
+
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
+            } else {
+                snake.pop();
+            }
+        }
+
+        function gameLoop() {
+            moveSnake();
+            drawSnake();
+            if (!gameOver) {
+                setTimeout(gameLoop, 100);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'w' && dy === 0) {
+                dx = 0;
+                dy = -1;
+            } else if (e.key === 's' && dy === 0) {
+                dx = 0;
+                dy = 1;
+            } else if (e.key === 'a' && dx === 0) {
+                dx = -1;
+                dy = 0;
+            } else if (e.key === 'd' && dx === 0) {
+                dx = 1;
+                dy = 0;
+            }
+        });
+
+        document.getElementById('restart-snake').addEventListener('click', () => {
+            snake = [{ x: 10, y: 10 }];
+            food = { x: 15, y: 15 };
+            dx = 0;
+            dy = 0;
+            gameOver = false;
+            gameLoop();
+        });
+
+        gameLoop();
+
+        const minesweeperCanvas = document.getElementById('minesweeper');
+        const minesweeperCtx = minesweeperCanvas.getContext('2d');
+        const gridSize = 10;
+        const cellSize = 20;
+        let board = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+        let revealed = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+        let flagged = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+        let mines = 15;
+        let gameOverMinesweeper = false;
+        let firstClick = true;
+
+        function placeMines(excludeX, excludeY) {
+            let placed = 0;
+            while (placed < mines) {
+                const x = Math.floor(Math.random() * gridSize);
+                const y = Math.floor(Math.random() * gridSize);
+
+                if (
+                    board[x][y] !== -1 &&
+                    !(x >= excludeX - 1 && x <= excludeX + 1 && y >= excludeY - 1 && y <= excludeY + 1)
+                ) {
+                    board[x][y] = -1;
+                    placed++;
+                }
+            }
+        }
+
+        function countMines(x, y) {
+            let count = 0;
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    if (x + i >= 0 && x + i < gridSize && y + j >= 0 && y + j < gridSize && board[x + i][y + j] === -1) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        function revealCell(x, y) {
+            if (x < 0 || x >= gridSize || y < 0 || y >= gridSize || revealed[x][y] || flagged[x][y]) return;
+
+            revealed[x][y] = true;
+
+            if (board[x][y] === -1) {
+                gameOverMinesweeper = true;
+                alert('Game Over!');
+                return;
+            }
+
+            const minesCount = countMines(x, y);
+            board[x][y] = minesCount;
+
+            if (minesCount === 0) {
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        revealCell(x + i, y + j);
+                    }
+                }
+            }
+
+            drawMinesweeper();
+
+            let safeCells = gridSize * gridSize - mines;
+            let revealedCells = revealed.flat().filter(cell => cell).length;
+            if (revealedCells === safeCells) {
+                alert('You Win!');
+                gameOverMinesweeper = true;
+            }
+        }
+
+        function toggleFlag(x, y) {
+            if (x < 0 || x >= gridSize || y < 0 || y >= gridSize || revealed[x][y]) return;
+            flagged[x][y] = !flagged[x][y];
+            drawMinesweeper();
+        }
+
+        function drawMinesweeper() {
+            minesweeperCtx.clearRect(0, 0, minesweeperCanvas.width, minesweeperCanvas.height);
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    minesweeperCtx.strokeStyle = '#fff';
+                    minesweeperCtx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+
+                    if (revealed[i][j]) {
+                        if (board[i][j] === -1) {
+                            minesweeperCtx.fillStyle = '#ff006e';
+                            minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                        } else if (board[i][j] > 0) {
+                            minesweeperCtx.fillStyle = '#fff';
+                            minesweeperCtx.font = '12px Arial';
+                            minesweeperCtx.fillText(board[i][j], i * cellSize + 5, j * cellSize + 15);
+                        } else {
+                            minesweeperCtx.strokeStyle = '#666';
+                            minesweeperCtx.beginPath();
+                            minesweeperCtx.moveTo(i * cellSize + 5, j * cellSize + 5);
+                            minesweeperCtx.lineTo(i * cellSize + 15, j * cellSize + 15);
+                            minesweeperCtx.moveTo(i * cellSize + 15, j * cellSize + 5);
+                            minesweeperCtx.lineTo(i * cellSize + 5, j * cellSize + 15);
+                            minesweeperCtx.stroke();
+                        }
+                    } else if (flagged[i][j]) {
+                        minesweeperCtx.fillStyle = '#00ff88';
+                        minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+        }
+
+        minesweeperCanvas.addEventListener('click', (e) => {
+            if (gameOverMinesweeper) return;
+
+            const rect = minesweeperCanvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / cellSize);
+            const y = Math.floor((e.clientY - rect.top) / cellSize);
+
+            if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+                if (firstClick) {
+                    placeMines(x, y);
+                    firstClick = false;
+
+                    for (let i = -1; i <= 1; i++) {
+                        for (let j = -1; j <= 1; j++) {
+                            revealCell(x + i, y + j);
+                        }
+                    }
+                } else {
+                    revealCell(x, y);
+                }
+            }
+        });
+
+        minesweeperCanvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (gameOverMinesweeper) return;
+
+            const rect = minesweeperCanvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / cellSize);
+            const y = Math.floor((e.clientY - rect.top) / cellSize);
+
+            if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+                toggleFlag(x, y);
+            }
+        });
+
+        // Обработчики для кнопок раскрытия мини-игр
+        const showMinesweeperButton = document.getElementById('show-minesweeper');
+        const showSnakeButton = document.getElementById('show-snake');
+        const gamesContainer = document.getElementById('games-container');
+        const minesweeperGame = document.getElementById('minesweeper-game');
+        const snakeGame = document.getElementById('snake-game');
+
+        showMinesweeperButton.addEventListener('click', () => {
+            gamesContainer.style.display = 'flex'; // Показываем контейнер
+            minesweeperGame.classList.add('active'); // Показываем Сапер
+            snakeGame.classList.remove('active'); // Скрываем Змейку
+        });
+
+        showSnakeButton.addEventListener('click', () => {
+            gamesContainer.style.display = 'flex'; // Показываем контейнер
+            snakeGame.classList.add('active'); // Показываем Змейку
+            minesweeperGame.classList.remove('active'); // Скрываем Сапер
+        });
+
+        drawMinesweeper();
+
+        const audio = document.getElementById('background-music');
+        const volumeControl = document.getElementById('volume');
+
+        function updateProgress() {
+        const value = volumeControl.value * 100;
+        volumeControl.style.setProperty('--progress', `${value}%`);
+    }
+
+    volumeControl.addEventListener('input', updateProgress);
+    updateProgress();
+        const playButton = document.getElementById('play-music');
+
+        audio.volume = 0.1;
+        volumeControl.value = 0.1;
+
+        audio.play().catch(error => {
+            console.log("Автовоспроизведение заблокировано. Пользователь должен взаимодействовать с сайтом.");
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+        });
+
+        playButton.addEventListener('click', () => {
+            audio.play();
+            playButton.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
