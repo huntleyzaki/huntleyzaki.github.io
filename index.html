@@ -201,15 +201,13 @@
             margin-top: 2rem;
         }
 
-.game {
-    width: 100%; /* Занимаем всю ширину контейнера */
-    background: rgba(34, 34, 34, 0.8);
-    padding: 1rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: none; /* Изначально скрыты */
-    margin-bottom: 1rem; /* Отступ между играми */
-}
+        .game {
+            width: 45%;
+            background: rgba(34, 34, 34, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
         .game h3 {
             text-align: center;
@@ -217,39 +215,40 @@
             color: #ff006e;
         }
 
-.game canvas {
-    width: 100%; /* Занимаем всю ширину родительского блока */
-    aspect-ratio: 1 / 1; /* Сохраняем квадратную форму */
-    max-width: 100%; /* Не превышаем ширину родительского блока */
-}
+        .game canvas {
+            display: block;
+            margin: 0 auto;
+            background: #222;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-@media (max-width: 768px) {
-    .game {
-        width: 100%; /* На мобильных устройствах занимаем всю ширину */
-        margin-bottom: 2rem; /* Увеличиваем отступ между играми */
-    }
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem;
+            }
 
-    .game canvas {
-        width: 100%; /* Занимаем всю ширину */
-        height: 300px; /* Фиксированная высота для удобства */
-    }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
 
-    .game-buttons {
-        flex-direction: column;
-        gap: 1rem;
-    }
+            .role-tag {
+                padding: 0.6rem 1.2rem;
+            }
 
-    .game-button {
-        width: 100%;
-        padding: 15px 30px; /* Увеличиваем размер кнопок */
-        font-size: 1.2rem; /* Увеличиваем шрифт кнопок */
-    }
+            .social-link {
+                padding: 10px 25px;
+            }
 
-    #minesweeper, #snake {
-        width: 100%;
-        height: 300px; /* Увеличиваем высоту игрового поля */
-    }
-}
+            .games-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .game {
+                width: 100%;
+            }
+        }
 
         body {
             display: flex;
@@ -381,53 +380,6 @@ button[id^="restart-"]:active {
     transform: translateY(0);
 }
 
-        /* Добавляем стили для кнопок и контейнера мини-игр */
-        .game-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .game-button {
-            background: rgba(34, 34, 34, 0.8);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid #ff006e;
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
-            cursor: pointer;
-        }
-
-        .game-button:hover {
-            background: #ff006e;
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
-        }
-
-        #games-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            width: 100%;
-            display: none; /* Изначально скрыт */
-        }
-
-        .game {
-            width: 45%;
-            background: rgba(34, 34, 34, 0.8);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none; /* Изначально скрыты */
-        }
-
-        .game.active {
-            display: block; /* Показываем активную мини-игру */
-        }
     </style>
 </head>
 <body>
@@ -450,24 +402,11 @@ button[id^="restart-"]:active {
             </div>
         </section>
 
-        <!-- Кнопки для раскрытия мини-игр -->
-        <div class="game-buttons">
-            <button id="show-minesweeper" class="game-button">Показать Сапера</button>
-            <button id="show-snake" class="game-button">Показать Змейку</button>
-        </div>
-
-        <!-- Контейнер для мини-игр, изначально скрытый -->
-        <div id="games-container">
-            <div id="minesweeper-game" class="game">
+        <div class="games-container">
+            <div class="game">
                 <h3>Сапер</h3>
                 <canvas id="minesweeper" width="200" height="200"></canvas>
                 <button id="restart-minesweeper" style="margin-top: 10px;">Перезапустить</button>
-            </div>
-
-            <div id="snake-game" class="game">
-                <h3>Змейка (ПК)</h3>
-                <canvas id="snake" width="200" height="200"></canvas>
-                <button id="restart-snake" style="margin-top: 10px;">Перезапустить</button>
             </div>
 
             <div class="game">
@@ -566,41 +505,39 @@ https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/downloa
 
     <script>
         const languageToggle = document.getElementById('language-toggle');
-const elementsToTranslate = {
-    'hero h1': { en: 'huntleyzaki', ru: 'huntleyzaki' },
-    'hero h2': { en: 'huntleyzaki.dev', ru: 'huntleyzaki.dev' },
-    '.role-tag:nth-child(1)': { en: 'Developer', ru: 'Разработчик' },
-    '.role-tag:nth-child(2)': { en: 'System Admin', ru: 'Системный администратор' },
-    '.role-tag:nth-child(3)': { en: 'Helper', ru: 'Помощник' },
-    '.game h3:nth-child(1)': { en: 'Minesweeper', ru: 'Сапер' },
-    '.game h3:nth-child(2)': { en: 'Snake (PC)', ru: 'Змейка (ПК)' },
-    '#restart-minesweeper': { en: 'Restart', ru: 'Перезапустить' },
-    '#restart-snake': { en: 'Restart', ru: 'Перезапустить' },
-    '.project-card:nth-child(1) h3': { en: 'Bot Developer', ru: 'Разработчик ботов' },
-    '.project-card:nth-child(1) p': { en: 'I am creating bots for Discord and Telegram for various functions.', ru: 'Я создаю ботов для Discord и Telegram для различных функций.' },
-    '.project-card:nth-child(2) h3': { en: 'Web Developer', ru: 'Веб-разработчик' },
-    '.project-card:nth-child(2) p': { en: 'I have skills in creating websites for various types of activities.', ru: 'У меня есть навыки создания сайтов для различных видов деятельности.' },
-    '.project-card:nth-child(3) h3': { en: 'Discord Server', ru: 'Discord сервер' },
-    '.project-card:nth-child(3) p': { en: 'I will create a customized Discord server for your convenient use.', ru: 'Я создам кастомизированный Discord сервер для вашего удобства.' },
-    '.project-card:nth-child(4) h3': { en: 'Webhooks', ru: 'Вебхуки' },
-    '.project-card:nth-child(4) p': { en: 'If necessary, I can make various webhooks for your Discord server.', ru: 'При необходимости, я могу сделать различные вебхуки для вашего Discord сервера.' },
-    '.skills h2': { en: 'Skills', ru: 'Навыки' },
-    '.skill-item:nth-child(1) h3': { en: 'HTML/CSS', ru: 'HTML/CSS' },
-    '.skill-item:nth-child(1) p': { en: 'Web Development', ru: 'Веб-разработка' },
-    '.skill-item:nth-child(2) h3': { en: 'Python', ru: 'Python' },
-    '.skill-item:nth-child(2) p': { en: 'Programming', ru: 'Программирование' },
-    '.skill-item:nth-child(3) h3': { en: 'C#', ru: 'C#' },
-    '.skill-item:nth-child(3) p': { en: 'Programming', ru: 'Программирование' },
-    '.skill-item:nth-child(4) h3': { en: 'Creative', ru: 'Креативность' },
-    '.skill-item:nth-child(4) p': { en: 'Creation servers', ru: 'Создание серверов' },
-    '.skill-item:nth-child(5) h3': { en: 'RPC experience', ru: 'Опыт с RPC' },
-    '.skill-item:nth-child(5) p': { en: 'Custom RPC for Discord', ru: 'Кастомный RPC для Discord' },
-    '.skill-item:nth-child(6) h3': { en: 'Coming Soon...', ru: 'Скоро...' },
-    'footer p': { en: '© 2025 huntleyzaki.dev. All rights reserved.', ru: '© 2025 huntleyzaki.dev. Все права защищены.' },
-    '#language-toggle': { en: 'Русский', ru: 'English' },
-    '#show-minesweeper': { en: 'Show Minesweeper', ru: 'Показать Сапер' },
-    '#show-snake': { en: 'Show Snake', ru: 'Показать Змейку' },
-};
+        const elementsToTranslate = {
+            'hero h1': { en: 'huntleyzaki', ru: 'huntleyzaki' },
+            'hero h2': { en: 'huntleyzaki.dev', ru: 'huntleyzaki.dev' },
+            '.role-tag:nth-child(1)': { en: 'Developer', ru: 'Разработчик' },
+            '.role-tag:nth-child(2)': { en: 'System Admin', ru: 'Системный администратор' },
+            '.role-tag:nth-child(3)': { en: 'Helper', ru: 'Помощник' },
+            '.game h3:nth-child(1)': { en: 'Minesweeper', ru: 'Сапер' },
+            '.game h3:nth-child(2)': { en: 'Snake (PC)', ru: 'Змейка (ПК)' },
+            '#restart-minesweeper': { en: 'Restart', ru: 'Перезапустить' },
+            '#restart-snake': { en: 'Restart', ru: 'Перезапустить' },
+            '.project-card:nth-child(1) h3': { en: 'Bot Developer', ru: 'Разработчик ботов' },
+            '.project-card:nth-child(1) p': { en: 'I am creating bots for Discord and Telegram for various functions.', ru: 'Я создаю ботов для Discord и Telegram для различных функций.' },
+            '.project-card:nth-child(2) h3': { en: 'Web Developer', ru: 'Веб-разработчик' },
+            '.project-card:nth-child(2) p': { en: 'I have skills in creating websites for various types of activities.', ru: 'У меня есть навыки создания сайтов для различных видов деятельности.' },
+            '.project-card:nth-child(3) h3': { en: 'Discord Server', ru: 'Discord сервер' },
+            '.project-card:nth-child(3) p': { en: 'I will create a customized Discord server for your convenient use.', ru: 'Я создам кастомизированный Discord сервер для вашего удобства.' },
+            '.project-card:nth-child(4) h3': { en: 'Webhooks', ru: 'Вебхуки' },
+            '.project-card:nth-child(4) p': { en: 'If necessary, I can make various webhooks for your discord server.', ru: 'При необходимости, я могу сделать различные вебхуки для вашего Discord сервера.' },
+            '.skills h2': { en: 'Skills', ru: 'Навыки' },
+            '.skill-item:nth-child(1) h3': { en: 'HTML/CSS', ru: 'HTML/CSS' },
+            '.skill-item:nth-child(1) p': { en: 'Web Development', ru: 'Веб-разработка' },
+            '.skill-item:nth-child(2) h3': { en: 'Python', ru: 'Python' },
+            '.skill-item:nth-child(2) p': { en: 'Programming', ru: 'Программирование' },
+            '.skill-item:nth-child(3) h3': { en: 'C#', ru: 'C#' },
+            '.skill-item:nth-child(3) p': { en: 'Programming', ru: 'Программирование' },
+            '.skill-item:nth-child(4) h3': { en: 'Creative', ru: 'Креативность' },
+            '.skill-item:nth-child(4) p': { en: 'Creation servers', ru: 'Создание серверов' },
+            '.skill-item:nth-child(5) h3': { en: 'RPC experience', ru: 'Опыт с RPC' },
+            '.skill-item:nth-child(5) p': { en: 'Custom RPC for Discord', ru: 'Кастомный RPC для Discord' },
+            '.skill-item:nth-child(6) h3': { en: 'Coming Soon...', ru: 'Скоро...' },
+            'footer p': { en: '© 2025 huntleyzaki.dev. All rights reserved.', ru: '© 2025 huntleyzaki.dev. Все права защищены.' },
+            '#language-toggle': { en: 'Русский', ru: 'English' },
+        };
 
         let currentLanguage = 'ru';
 
@@ -684,14 +621,13 @@ const elementsToTranslate = {
         let dy = 0;
         let gameOver = false;
 
-function drawSnake() {
-    const cellSize = snakeCanvas.width / 20; // Размер клетки зависит от ширины canvas
-    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-    snakeCtx.fillStyle = '#00ff88';
-    snake.forEach(segment => snakeCtx.fillRect(segment.x * cellSize, segment.y * cellSize, cellSize, cellSize));
-    snakeCtx.fillStyle = '#ff006e';
-    snakeCtx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
-}
+        function drawSnake() {
+            snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+            snakeCtx.fillStyle = '#00ff88';
+            snake.forEach(segment => snakeCtx.fillRect(segment.x * 10, segment.y * 10, 10, 10));
+            snakeCtx.fillStyle = '#ff006e';
+            snakeCtx.fillRect(food.x * 10, food.y * 10, 10, 10);
+        }
 
         function moveSnake() {
             if (gameOver) return;
@@ -832,38 +768,37 @@ function drawSnake() {
             drawMinesweeper();
         }
 
-function drawMinesweeper() {
-    const cellSize = minesweeperCanvas.width / gridSize; // Размер клетки зависит от ширины canvas
-    minesweeperCtx.clearRect(0, 0, minesweeperCanvas.width, minesweeperCanvas.height);
-    for (let i = 0; i < gridSize; i++) {
-        for (let j = 0; j < gridSize; j++) {
-            minesweeperCtx.strokeStyle = '#fff';
-            minesweeperCtx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+        function drawMinesweeper() {
+            minesweeperCtx.clearRect(0, 0, minesweeperCanvas.width, minesweeperCanvas.height);
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    minesweeperCtx.strokeStyle = '#fff';
+                    minesweeperCtx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
 
-            if (revealed[i][j]) {
-                if (board[i][j] === -1) {
-                    minesweeperCtx.fillStyle = '#ff006e';
-                    minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
-                } else if (board[i][j] > 0) {
-                    minesweeperCtx.fillStyle = '#fff';
-                    minesweeperCtx.font = '12px Arial';
-                    minesweeperCtx.fillText(board[i][j], i * cellSize + 5, j * cellSize + 15);
-                } else {
-                    minesweeperCtx.strokeStyle = '#666';
-                    minesweeperCtx.beginPath();
-                    minesweeperCtx.moveTo(i * cellSize + 5, j * cellSize + 5);
-                    minesweeperCtx.lineTo(i * cellSize + 15, j * cellSize + 15);
-                    minesweeperCtx.moveTo(i * cellSize + 15, j * cellSize + 5);
-                    minesweeperCtx.lineTo(i * cellSize + 5, j * cellSize + 15);
-                    minesweeperCtx.stroke();
+                    if (revealed[i][j]) {
+                        if (board[i][j] === -1) {
+                            minesweeperCtx.fillStyle = '#ff006e';
+                            minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                        } else if (board[i][j] > 0) {
+                            minesweeperCtx.fillStyle = '#fff';
+                            minesweeperCtx.font = '12px Arial';
+                            minesweeperCtx.fillText(board[i][j], i * cellSize + 5, j * cellSize + 15);
+                        } else {
+                            minesweeperCtx.strokeStyle = '#666';
+                            minesweeperCtx.beginPath();
+                            minesweeperCtx.moveTo(i * cellSize + 5, j * cellSize + 5);
+                            minesweeperCtx.lineTo(i * cellSize + 15, j * cellSize + 15);
+                            minesweeperCtx.moveTo(i * cellSize + 15, j * cellSize + 5);
+                            minesweeperCtx.lineTo(i * cellSize + 5, j * cellSize + 15);
+                            minesweeperCtx.stroke();
+                        }
+                    } else if (flagged[i][j]) {
+                        minesweeperCtx.fillStyle = '#00ff88';
+                        minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                    }
                 }
-            } else if (flagged[i][j]) {
-                minesweeperCtx.fillStyle = '#00ff88';
-                minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
-    }
-}
 
         minesweeperCanvas.addEventListener('click', (e) => {
             if (gameOverMinesweeper) return;
@@ -901,38 +836,15 @@ function drawMinesweeper() {
             }
         });
 
-        function resizeCanvasToSquare(canvas) {
-    const parent = canvas.parentElement;
-    const width = parent.clientWidth; // Ширина родительского контейнера
-    const size = Math.min(width, 500); // Ограничиваем максимальный размер (например, 500px)
-    canvas.width = size;
-    canvas.height = size;
-}
-        window.addEventListener('resize', () => {
-    resizeCanvasToSquare(snakeCanvas);
-    resizeCanvasToSquare(minesweeperCanvas);
-});
-        
-        // Обработчики для кнопок раскрытия мини-игр
-        const showMinesweeperButton = document.getElementById('show-minesweeper');
-        const showSnakeButton = document.getElementById('show-snake');
-        const gamesContainer = document.getElementById('games-container');
-        const minesweeperGame = document.getElementById('minesweeper-game');
-        const snakeGame = document.getElementById('snake-game');
+        document.getElementById('restart-minesweeper').addEventListener('click', () => {
+            board = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+            revealed = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+            flagged = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+            gameOverMinesweeper = false;
+            firstClick = true;
+            drawMinesweeper();
+        });
 
-showMinesweeperButton.addEventListener('click', () => {
-    gamesContainer.style.display = 'flex';
-    minesweeperGame.classList.add('active');
-    snakeGame.classList.remove('active');
-    resizeCanvasToSquare(minesweeperCanvas); // Обновляем размеры canvas
-});
-
-showSnakeButton.addEventListener('click', () => {
-    gamesContainer.style.display = 'flex';
-    snakeGame.classList.add('active');
-    minesweeperGame.classList.remove('active');
-    resizeCanvasToSquare(snakeCanvas); // Обновляем размеры canvas
-});
         drawMinesweeper();
 
         const audio = document.getElementById('background-music');
