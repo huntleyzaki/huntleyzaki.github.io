@@ -531,52 +531,56 @@ https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/downloa
 
     <script>
         const languageToggle = document.getElementById('language-toggle');
-        const elementsToTranslate = {
-            'hero h1': { en: 'huntleyzaki', ru: 'huntleyzaki' },
-            'hero h2': { en: 'huntleyzaki.dev', ru: 'huntleyzaki.dev' },
-            '.role-tag:nth-child(1)': { en: 'Developer', ru: 'Разработчик' },
-            '.role-tag:nth-child(2)': { en: 'System Admin', ru: 'Системный администратор' },
-            '.role-tag:nth-child(3)': { en: 'Helper', ru: 'Помощник' },
-            '.game h3:nth-child(1)': { en: 'Minesweeper', ru: 'Сапер' },
-            '.game h3:nth-child(2)': { en: 'Snake (PC)', ru: 'Змейка (ПК)' },
-            '#restart-minesweeper': { en: 'Restart', ru: 'Перезапустить' },
-            '#restart-snake': { en: 'Restart', ru: 'Перезапустить' },
-            '.project-card:nth-child(1) h3': { en: 'Bot Developer', ru: 'Разработчик ботов' },
-            '.project-card:nth-child(1) p': { en: 'I am creating bots for Discord and Telegram for various functions.', ru: 'Я создаю ботов для Discord и Telegram для различных функций.' },
-            '.project-card:nth-child(2) h3': { en: 'Web Developer', ru: 'Веб-разработчик' },
-            '.project-card:nth-child(2) p': { en: 'I have skills in creating websites for various types of activities.', ru: 'У меня есть навыки создания сайтов для различных видов деятельности.' },
-            '.project-card:nth-child(3) h3': { en: 'Discord Server', ru: 'Discord сервер' },
-            '.project-card:nth-child(3) p': { en: 'I will create a customized Discord server for your convenient use.', ru: 'Я создам кастомизированный Discord сервер для вашего удобства.' },
-            '.project-card:nth-child(4) h3': { en: 'Webhooks', ru: 'Вебхуки' },
-            '.project-card:nth-child(4) p': { en: 'If necessary, I can make various webhooks for your discord server.', ru: 'При необходимости, я могу сделать различные вебхуки для вашего Discord сервера.' },
-            '.skills h2': { en: 'Skills', ru: 'Навыки' },
-            '.skill-item:nth-child(1) h3': { en: 'HTML/CSS', ru: 'HTML/CSS' },
-            '.skill-item:nth-child(1) p': { en: 'Web Development', ru: 'Веб-разработка' },
-            '.skill-item:nth-child(2) h3': { en: 'Python', ru: 'Python' },
-            '.skill-item:nth-child(2) p': { en: 'Programming', ru: 'Программирование' },
-            '.skill-item:nth-child(3) h3': { en: 'C#', ru: 'C#' },
-            '.skill-item:nth-child(3) p': { en: 'Programming', ru: 'Программирование' },
-            '.skill-item:nth-child(4) h3': { en: 'Creative', ru: 'Креативность' },
-            '.skill-item:nth-child(4) p': { en: 'Creation servers', ru: 'Создание серверов' },
-            '.skill-item:nth-child(5) h3': { en: 'RPC experience', ru: 'Опыт с RPC' },
-            '.skill-item:nth-child(5) p': { en: 'Custom RPC for Discord', ru: 'Кастомный RPC для Discord' },
-            '.skill-item:nth-child(6) h3': { en: 'Coming Soon...', ru: 'Скоро...' },
-            'footer p': { en: '© 2025 huntleyzaki.dev. All rights reserved.', ru: '© 2025 huntleyzaki.dev. Все права защищены.' },
-            '#language-toggle': { en: 'Русский', ru: 'English' },
-        };
+const elementsToTranslate = {
+    'hero h1': { en: 'huntleyzaki', ru: 'huntleyzaki' },
+    'hero h2': { en: 'huntleyzaki.dev', ru: 'huntleyzaki.dev' },
+    '.role-tag:nth-child(1)': { en: 'Developer', ru: 'Разработчик' },
+    '.role-tag:nth-child(2)': { en: 'System Admin', ru: 'Системный администратор' },
+    '.role-tag:nth-child(3)': { en: 'Helper', ru: 'Помощник' },
 
-        let currentLanguage = 'ru';
+    // 🆕 Добавлено для кнопок показа и перезапуска игр
+    '#show-minesweeper': { en: 'Show Minesweeper', ru: 'Показать Сапера' },
+    '#show-snake': { en: 'Show Snake', ru: 'Показать Змейку' },
+    '#restart-minesweeper': { en: 'Restart Minesweeper', ru: 'Перезапустить Сапера' },
+    '#restart-snake': { en: 'Restart Snake', ru: 'Перезапустить Змейку' },
 
-        languageToggle.addEventListener('click', () => {
-            currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
-            languageToggle.textContent = currentLanguage === 'en' ? 'Русский' : 'English';
-            Object.keys(elementsToTranslate).forEach(selector => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    element.textContent = elementsToTranslate[selector][currentLanguage];
-                }
-            });
-        });
+    // 🆕 Добавлено для надписей на играх
+    '#minesweeper-game h3': { en: 'Minesweeper', ru: 'Сапер' },
+    '#snake-game h3': { en: 'Snake (PC)', ru: 'Змейка (ПК)' },
+
+    '.skills h2': { en: 'Skills', ru: 'Навыки' },
+    '.skill-item:nth-child(1) h3': { en: 'HTML/CSS', ru: 'HTML/CSS' },
+    '.skill-item:nth-child(1) p': { en: 'Web Development', ru: 'Веб-разработка' },
+    '.skill-item:nth-child(2) h3': { en: 'Python', ru: 'Python' },
+    '.skill-item:nth-child(2) p': { en: 'Programming', ru: 'Программирование' },
+    '.skill-item:nth-child(3) h3': { en: 'C#', ru: 'C#' },
+    '.skill-item:nth-child(3) p': { en: 'Programming', ru: 'Программирование' },
+    '.skill-item:nth-child(4) h3': { en: 'Creativity', ru: 'Креативность' },
+    '.skill-item:nth-child(4) p': { en: 'Creating Servers', ru: 'Создание серверов' },
+    '.skill-item:nth-child(5) h3': { en: 'RPC Experience', ru: 'Опыт с RPC' },
+    '.skill-item:nth-child(5) p': { en: 'Custom RPC for Discord', ru: 'Кастомный RPC для Discord' },
+    '.skill-item:nth-child(6) h3': { en: 'Coming Soon...', ru: 'Скоро...' },
+
+    'footer p': { en: '© 2025 huntleyzaki.dev. All rights reserved.', ru: '© 2025 huntleyzaki.dev. Все права защищены.' },
+    '#language-toggle': { en: 'Русский', ru: 'English' },
+};
+
+// Логика переключения языка
+let currentLanguage = 'ru';
+
+document.getElementById('language-toggle').addEventListener('click', () => {
+    currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+    document.getElementById('language-toggle').textContent = currentLanguage === 'en' ? 'Русский' : 'English';
+
+    // Перевод всех элементов из объекта elementsToTranslate
+    Object.keys(elementsToTranslate).forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.textContent = elementsToTranslate[selector][currentLanguage];
+        }
+    });
+});
+
 
         const canvas = document.getElementById('dots-canvas');
         const ctx = canvas.getContext('2d');
@@ -639,83 +643,110 @@ https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/downloa
 
         init();
 
-        const snakeCanvas = document.getElementById('snake');
-        const snakeCtx = snakeCanvas.getContext('2d');
-        let snake = [{ x: 10, y: 10 }];
-        let food = { x: 15, y: 15 };
-        let dx = 0;
-        let dy = 0;
-        let gameOver = false;
+const snakeCanvas = document.getElementById('snake');
+const snakeCtx = snakeCanvas.getContext('2d');
+let snake = [{ x: 10, y: 10 }];
+let food = { x: 15, y: 15 };
+let dx = 0;
+let dy = 0;
+let gameOver = false;
 
-        function drawSnake() {
-            snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-            snakeCtx.fillStyle = '#00ff88';
-            snake.forEach(segment => snakeCtx.fillRect(segment.x * 10, segment.y * 10, 10, 10));
-            snakeCtx.fillStyle = '#ff006e';
-            snakeCtx.fillRect(food.x * 10, food.y * 10, 10, 10);
+function drawSnake() {
+    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    snakeCtx.fillStyle = '#00ff88';
+    snake.forEach(segment => snakeCtx.fillRect(segment.x * 10, segment.y * 10, 10, 10));
+    snakeCtx.fillStyle = '#ff006e';
+    snakeCtx.fillRect(food.x * 10, food.y * 10, 10, 10);
+}
+
+function moveSnake() {
+    if (gameOver) return;
+
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+    // Проверка на столкновение со стеной
+    if (head.x < 0 || head.x >= snakeCanvas.width / 10 || head.y < 0 || head.y >= snakeCanvas.height / 10) {
+        gameOver = true;
+        alert('Game Over!');
+        return;
+    }
+
+    // Проверка на столкновение с телом
+    for (let i = 1; i < snake.length; i++) {
+        if (head.x === snake[i].x && head.y === snake[i].y) {
+            gameOver = true;
+            alert('Game Over!');
+            return;
         }
+    }
 
-        function moveSnake() {
-            if (gameOver) return;
+    snake.unshift(head);
 
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+    // Проверка на поедание еды
+    if (head.x === food.x && head.y === food.y) {
+        food = {
+            x: Math.floor(Math.random() * (snakeCanvas.width / 10)),
+            y: Math.floor(Math.random() * (snakeCanvas.height / 10))
+        };
+    } else {
+        snake.pop();
+    }
+}
 
-            if (head.x < 0 || head.x >= snakeCanvas.width / 10 || head.y < 0 || head.y >= snakeCanvas.height / 10) {
-                gameOver = true;
-                alert('Game Over!');
-                return;
-            }
+function gameLoop() {
+    moveSnake();
+    drawSnake();
+    if (!gameOver) {
+        setTimeout(gameLoop, 100);
+    }
+}
 
-            for (let i = 1; i < snake.length; i++) {
-                if (head.x === snake[i].x && head.y === snake[i].y) {
-                    gameOver = true;
-                    alert('Game Over!');
-                    return;
-                }
-            }
-
-            snake.unshift(head);
-            if (head.x === food.x && head.y === food.y) {
-                food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
-            } else {
-                snake.pop();
-            }
-        }
-
-        function gameLoop() {
-            moveSnake();
-            drawSnake();
-            if (!gameOver) {
-                setTimeout(gameLoop, 100);
-            }
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'w' && dy === 0) {
+// Универсальная обработка нажатий на клавиши (по кодам клавиш)
+document.addEventListener('keydown', (e) => {
+    switch (e.code) {
+        case 'ArrowUp':
+        case 'KeyW':
+            if (dy === 0) {
                 dx = 0;
                 dy = -1;
-            } else if (e.key === 's' && dy === 0) {
+            }
+            break;
+        case 'ArrowDown':
+        case 'KeyS':
+            if (dy === 0) {
                 dx = 0;
                 dy = 1;
-            } else if (e.key === 'a' && dx === 0) {
+            }
+            break;
+        case 'ArrowLeft':
+        case 'KeyA':
+            if (dx === 0) {
                 dx = -1;
                 dy = 0;
-            } else if (e.key === 'd' && dx === 0) {
+            }
+            break;
+        case 'ArrowRight':
+        case 'KeyD':
+            if (dx === 0) {
                 dx = 1;
                 dy = 0;
             }
-        });
+            break;
+    }
+});
 
-        document.getElementById('restart-snake').addEventListener('click', () => {
-            snake = [{ x: 10, y: 10 }];
-            food = { x: 15, y: 15 };
-            dx = 0;
-            dy = 0;
-            gameOver = false;
-            gameLoop();
-        });
+// Кнопка перезапуска змейки
+document.getElementById('restart-snake').addEventListener('click', () => {
+    snake = [{ x: 10, y: 10 }];
+    food = { x: 15, y: 15 };
+    dx = 0;
+    dy = 0;
+    gameOver = false;
+    gameLoop();
+});
 
-        gameLoop();
+gameLoop();
+
 
         const minesweeperCanvas = document.getElementById('minesweeper');
         const minesweeperCtx = minesweeperCanvas.getContext('2d');
@@ -881,15 +912,24 @@ https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/downloa
         volumeControl.style.setProperty('--progress', `${value}%`);
     }
 
-    document.getElementById('show-minesweeper').addEventListener('click', () => {
+document.getElementById('show-minesweeper').addEventListener('click', () => {
     document.getElementById('minesweeper-game').style.display = 'block';
     document.getElementById('show-minesweeper').style.display = 'none';
+
+    // Скрываем другую игру (Змейку)
+    document.getElementById('snake-game').style.display = 'none';
+    document.getElementById('show-snake').style.display = 'inline-block';
 });
 
 document.getElementById('show-snake').addEventListener('click', () => {
     document.getElementById('snake-game').style.display = 'block';
     document.getElementById('show-snake').style.display = 'none';
+
+    // Скрываем другую игру (Сапёра)
+    document.getElementById('minesweeper-game').style.display = 'none';
+    document.getElementById('show-minesweeper').style.display = 'inline-block';
 });
+
 
     volumeControl.addEventListener('input', updateProgress);
     updateProgress();
