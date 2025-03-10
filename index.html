@@ -831,37 +831,38 @@ const elementsToTranslate = {
             drawMinesweeper();
         }
 
-        function drawMinesweeper() {
-            minesweeperCtx.clearRect(0, 0, minesweeperCanvas.width, minesweeperCanvas.height);
-            for (let i = 0; i < gridSize; i++) {
-                for (let j = 0; j < gridSize; j++) {
-                    minesweeperCtx.strokeStyle = '#fff';
-                    minesweeperCtx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+function drawMinesweeper() {
+    const cellSize = minesweeperCanvas.width / gridSize; // Размер клетки зависит от ширины canvas
+    minesweeperCtx.clearRect(0, 0, minesweeperCanvas.width, minesweeperCanvas.height);
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            minesweeperCtx.strokeStyle = '#fff';
+            minesweeperCtx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
 
-                    if (revealed[i][j]) {
-                        if (board[i][j] === -1) {
-                            minesweeperCtx.fillStyle = '#ff006e';
-                            minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
-                        } else if (board[i][j] > 0) {
-                            minesweeperCtx.fillStyle = '#fff';
-                            minesweeperCtx.font = '12px Arial';
-                            minesweeperCtx.fillText(board[i][j], i * cellSize + 5, j * cellSize + 15);
-                        } else {
-                            minesweeperCtx.strokeStyle = '#666';
-                            minesweeperCtx.beginPath();
-                            minesweeperCtx.moveTo(i * cellSize + 5, j * cellSize + 5);
-                            minesweeperCtx.lineTo(i * cellSize + 15, j * cellSize + 15);
-                            minesweeperCtx.moveTo(i * cellSize + 15, j * cellSize + 5);
-                            minesweeperCtx.lineTo(i * cellSize + 5, j * cellSize + 15);
-                            minesweeperCtx.stroke();
-                        }
-                    } else if (flagged[i][j]) {
-                        minesweeperCtx.fillStyle = '#00ff88';
-                        minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
-                    }
+            if (revealed[i][j]) {
+                if (board[i][j] === -1) {
+                    minesweeperCtx.fillStyle = '#ff006e';
+                    minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                } else if (board[i][j] > 0) {
+                    minesweeperCtx.fillStyle = '#fff';
+                    minesweeperCtx.font = '12px Arial';
+                    minesweeperCtx.fillText(board[i][j], i * cellSize + 5, j * cellSize + 15);
+                } else {
+                    minesweeperCtx.strokeStyle = '#666';
+                    minesweeperCtx.beginPath();
+                    minesweeperCtx.moveTo(i * cellSize + 5, j * cellSize + 5);
+                    minesweeperCtx.lineTo(i * cellSize + 15, j * cellSize + 15);
+                    minesweeperCtx.moveTo(i * cellSize + 15, j * cellSize + 5);
+                    minesweeperCtx.lineTo(i * cellSize + 5, j * cellSize + 15);
+                    minesweeperCtx.stroke();
                 }
+            } else if (flagged[i][j]) {
+                minesweeperCtx.fillStyle = '#00ff88';
+                minesweeperCtx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
+    }
+}
 
         minesweeperCanvas.addEventListener('click', (e) => {
             if (gameOverMinesweeper) return;
@@ -906,6 +907,11 @@ const elementsToTranslate = {
     canvas.width = size;
     canvas.height = size;
 }
+        window.addEventListener('resize', () => {
+    resizeCanvasToSquare(snakeCanvas);
+    resizeCanvasToSquare(minesweeperCanvas);
+});
+        
         // Обработчики для кнопок раскрытия мини-игр
         const showMinesweeperButton = document.getElementById('show-minesweeper');
         const showSnakeButton = document.getElementById('show-snake');
@@ -913,18 +919,19 @@ const elementsToTranslate = {
         const minesweeperGame = document.getElementById('minesweeper-game');
         const snakeGame = document.getElementById('snake-game');
 
-        showMinesweeperButton.addEventListener('click', () => {
-            gamesContainer.style.display = 'flex'; // Показываем контейнер
-            minesweeperGame.classList.add('active'); // Показываем Сапер
-            snakeGame.classList.remove('active'); // Скрываем Змейку
-        });
+showMinesweeperButton.addEventListener('click', () => {
+    gamesContainer.style.display = 'flex';
+    minesweeperGame.classList.add('active');
+    snakeGame.classList.remove('active');
+    resizeCanvasToSquare(minesweeperCanvas); // Обновляем размеры canvas
+});
 
-        showSnakeButton.addEventListener('click', () => {
-            gamesContainer.style.display = 'flex'; // Показываем контейнер
-            snakeGame.classList.add('active'); // Показываем Змейку
-            minesweeperGame.classList.remove('active'); // Скрываем Сапер
-        });
-
+showSnakeButton.addEventListener('click', () => {
+    gamesContainer.style.display = 'flex';
+    snakeGame.classList.add('active');
+    minesweeperGame.classList.remove('active');
+    resizeCanvasToSquare(snakeCanvas); // Обновляем размеры canvas
+});
         drawMinesweeper();
 
         const audio = document.getElementById('background-music');
