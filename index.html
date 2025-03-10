@@ -201,13 +201,15 @@
             margin-top: 2rem;
         }
 
-        .game {
-            width: 45%;
-            background: rgba(34, 34, 34, 0.8);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+.game {
+    width: 100%; /* Занимаем всю ширину контейнера */
+    background: rgba(34, 34, 34, 0.8);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: none; /* Изначально скрыты */
+    margin-bottom: 1rem; /* Отступ между играми */
+}
 
         .game h3 {
             text-align: center;
@@ -216,21 +218,20 @@
         }
 
         .game canvas {
-            display: block;
-            margin: 0 auto;
-            background: #222;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+    width: 100%; /* Занимаем всю ширину родительского блока */
+    height: auto; /* Автоматическая высота */
+    max-width: 100%; /* Не превышаем ширину родительского блока */
+}
 
 @media (max-width: 768px) {
     .game {
-        width: 100%;
-        margin-bottom: 2rem;
+        width: 100%; /* На мобильных устройствах занимаем всю ширину */
+        margin-bottom: 2rem; /* Увеличиваем отступ между играми */
     }
 
     .game canvas {
-        width: 100%;
-        height: 300px; /* Увеличиваем высоту игрового поля */
+        width: 100%; /* Занимаем всю ширину */
+        height: 300px; /* Фиксированная высота для удобства */
     }
 
     .game-buttons {
@@ -245,7 +246,7 @@
     }
 
     #minesweeper, #snake {
-        width: 300px;
+        width: 100%;
         height: 300px; /* Увеличиваем высоту игрового поля */
     }
 }
