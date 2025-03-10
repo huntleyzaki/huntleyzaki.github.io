@@ -222,33 +222,37 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 1.5rem;
-            }
+@media (max-width: 768px) {
+    .games-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
 
-            .hero h1 {
-                font-size: 2.5rem;
-            }
+    .game {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
 
-            .role-tag {
-                padding: 0.6rem 1.2rem;
-            }
+    .game canvas {
+        width: 100%;
+        height: auto;
+    }
 
-            .social-link {
-                padding: 10px 25px;
-            }
+    .game-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
 
-            .games-container {
-                flex-direction: column;
-                gap: 2rem;
-            }
+    .game-button {
+        width: 100%;
+        text-align: center;
+    }
 
-            .game {
-                width: 100%;
-            }
-        }
+    #minesweeper, #snake {
+        width: 100%;
+        height: auto;
+    }
+}
 
         body {
             display: flex;
