@@ -195,20 +195,44 @@
             font-size: 1.2rem;
         }
 
-        .games-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
+.game-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
 
-        .game {
-            width: 45%;
-            background: rgba(34, 34, 34, 0.8);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+.game-buttons button {
+    background: #ff006e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
 
+.game-buttons button:hover {
+    background: #ff3385;
+}
+
+.games-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.game {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(34, 34, 34, 0.8);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
         .game h3 {
             text-align: center;
             margin-bottom: 1rem;
@@ -402,20 +426,22 @@ button[id^="restart-"]:active {
             </div>
         </section>
 
-        <div class="games-container">
-            <div class="game">
-                <h3>Сапер</h3>
-                <canvas id="minesweeper" width="200" height="200"></canvas>
-                <button id="restart-minesweeper" style="margin-top: 10px;">Перезапустить</button>
-            </div>
-
-            <div class="game">
-                <h3>Змейка (ПК)</h3>
-                <canvas id="snake" width="200" height="200"></canvas>
-                <button id="restart-snake" style="margin-top: 10px;">Перезапустить</button>
-            </div>
-        </div>
-
+<div class="games-container">
+    <div class="game-buttons">
+        <button id="show-minesweeper">Показать Сапера</button>
+        <button id="show-snake">Показать Змейку</button>
+    </div>
+    <div class="game" id="minesweeper-game" style="display: none;">
+        <h3>Сапер</h3>
+        <canvas id="minesweeper" width="200" height="200"></canvas>
+        <button id="restart-minesweeper" style="margin-top: 10px;">Перезапустить</button>
+    </div>
+    <div class="game" id="snake-game" style="display: none;">
+        <h3>Змейка (ПК)</h3>
+        <canvas id="snake" width="200" height="200"></canvas>
+        <button id="restart-snake" style="margin-top: 10px;">Перезапустить</button>
+    </div>
+</div>
         <section class="projects">
             <div class="project-card">
                 <h3>Разработчик ботов</h3>
@@ -854,6 +880,16 @@ https://cdn2.drivemusic.club/dl/online/45ZQFERP8-jBxjV8LFSO-Q/1741550986/downloa
         const value = volumeControl.value * 100;
         volumeControl.style.setProperty('--progress', `${value}%`);
     }
+
+    document.getElementById('show-minesweeper').addEventListener('click', () => {
+    document.getElementById('minesweeper-game').style.display = 'block';
+    document.getElementById('show-minesweeper').style.display = 'none';
+});
+
+document.getElementById('show-snake').addEventListener('click', () => {
+    document.getElementById('snake-game').style.display = 'block';
+    document.getElementById('show-snake').style.display = 'none';
+});
 
     volumeControl.addEventListener('input', updateProgress);
     updateProgress();
