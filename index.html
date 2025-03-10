@@ -223,11 +223,6 @@
         }
 
 @media (max-width: 768px) {
-    .games-container {
-        flex-direction: column;
-        gap: 2rem;
-    }
-
     .game {
         width: 100%;
         margin-bottom: 2rem;
@@ -235,7 +230,7 @@
 
     .game canvas {
         width: 100%;
-        height: auto;
+        height: 300px; /* Увеличиваем высоту игрового поля */
     }
 
     .game-buttons {
@@ -245,12 +240,13 @@
 
     .game-button {
         width: 100%;
-        text-align: center;
+        padding: 15px 30px; /* Увеличиваем размер кнопок */
+        font-size: 1.2rem; /* Увеличиваем шрифт кнопок */
     }
 
     #minesweeper, #snake {
         width: 100%;
-        height: auto;
+        height: 300px; /* Увеличиваем высоту игрового поля */
     }
 }
 
