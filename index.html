@@ -217,9 +217,9 @@
             color: #ff006e;
         }
 
-        .game canvas {
+.game canvas {
     width: 100%; /* Занимаем всю ширину родительского блока */
-    height: auto; /* Автоматическая высота */
+    aspect-ratio: 1 / 1; /* Сохраняем квадратную форму */
     max-width: 100%; /* Не превышаем ширину родительского блока */
 }
 
@@ -899,6 +899,13 @@ const elementsToTranslate = {
             }
         });
 
+        function resizeCanvasToSquare(canvas) {
+    const parent = canvas.parentElement;
+    const width = parent.clientWidth; // Ширина родительского контейнера
+    const size = Math.min(width, 500); // Ограничиваем максимальный размер (например, 500px)
+    canvas.width = size;
+    canvas.height = size;
+}
         // Обработчики для кнопок раскрытия мини-игр
         const showMinesweeperButton = document.getElementById('show-minesweeper');
         const showSnakeButton = document.getElementById('show-snake');
