@@ -1927,7 +1927,12 @@ let stats = JSON.parse(localStorage.getItem('stats')) || {
     achievements: []
 };
 
-stats.visitors++;
+fetch('stats.php?action=increment_visitors')
+  .then(response => response.json())
+  .then(data => {
+    stats.visitors = data.visitors;
+    document.getElementById('visitors').textContent = stats.visitors;
+  });
 document.getElementById('visitors').textContent = stats.visitors;
 document.getElementById('battleship-wins').textContent = stats.battleshipWins || 0;
 
