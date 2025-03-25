@@ -1318,6 +1318,7 @@ function revealCell(x, y) {
         gameOverMinesweeper = true;
         stats.gamesPlayed++;
         updateStats();
+        checkMinesweeperAchievement(); // Добавьте эту строку
         alert('Победа!');
     }
 }
