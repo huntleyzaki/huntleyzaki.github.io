@@ -1885,6 +1885,7 @@ function checkWinCondition() {
     if (playerWon) {
         updateBattleshipInfo('you_win');
         document.getElementById('restart-battleship').style.display = 'inline-block';
+        checkBattleshipAchievement();
         return true;
     }
     
