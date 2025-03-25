@@ -869,7 +869,7 @@
     <div class="stats-grid">
         <div class="stat-item">
             <h3>Посетители</h3>
-            <p id="visitors">0</p>
+            <p id="visitors">53</p>
         </div>
         <div class="stat-item">
             <h3>Игры сыграно</h3>
@@ -1948,25 +1948,30 @@ function getTranslatedMessage(key, params = {}) {
 }
 
 let stats = JSON.parse(localStorage.getItem('stats')) || {
-    visitors: 0,
+    visitors: 13,
     gamesPlayed: 0,
     snakeRecord: 0,
     battleshipWins: 0,
     achievements: []
 };
 
-fetch('stats.php?action=increment_visitors')
-  .then(response => response.json())
-  .then(data => {
-    stats.visitors = data.visitors;
-    document.getElementById('visitors').textContent = stats.visitors;
-  });
+// Отправляем событие в Google Analytics
+gtag('event', 'page_view', {
+    'page_title': 'huntleyzaki.dev',
+    'page_location': window.location.href
+});
+
+// Обновляем отображение (показываем локальные данные)
 document.getElementById('visitors').textContent = stats.visitors;
+document.getElementById('games-played').textContent = stats.gamesPlayed;
+document.getElementById('snake-record').textContent = stats.snakeRecord;
 document.getElementById('battleship-wins').textContent = stats.battleshipWins || 0;
 
+// Проверяем достижения
 if (stats.visitors === 1 && !stats.achievements.includes('first_visit')) {
     stats.achievements.push('first_visit');
     showAchievementNotification('Первый визит');
+    localStorage.setItem('stats', JSON.stringify(stats));
 }
 
 function updateStats() {
