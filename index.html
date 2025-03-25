@@ -1070,14 +1070,12 @@ languageToggle.addEventListener('click', () => {
         }
     });
 });
-// Пример для кнопки "Показать Сапера" (строка ~1024 в вашем коде)
 document.getElementById('show-minesweeper').addEventListener('click', () => {
     gtag('event', 'game_start', {
         'game_name': 'Minesweeper'
     });
 });
 
-// Аналогично для других кнопок:
 document.getElementById('show-snake').addEventListener('click', () => {
     gtag('event', 'game_start', {
         'game_name': 'Snake'
@@ -1325,7 +1323,7 @@ function revealCell(x, y) {
         gameOverMinesweeper = true;
         stats.gamesPlayed++;
         updateStats();
-        checkMinesweeperAchievement(); // Добавьте эту строку
+        checkMinesweeperAchievement();
         alert('Победа!');
     }
 }
