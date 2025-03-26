@@ -1129,6 +1129,22 @@ document.getElementById('show-snake').addEventListener('click', function(e) {
     document.getElementById('snake-game').style.display = 'block';
     document.getElementById('minesweeper-game').style.display = 'none';
     document.getElementById('battleship-game').style.display = 'none';
+    
+    // Инициализация игры при каждом показе
+    snake = [{ x: 10, y: 10 }];
+    food = { x: 15, y: 15 };
+    dx = 1; // Начальное направление - вправо
+    dy = 0;
+    gameOver = false;
+    
+    // Очистка canvas и перерисовка
+    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    drawSnake();
+    
+    // Запуск игрового цикла только если он еще не запущен
+    if (!gameOver) {
+        gameLoop();
+    }
 });
 
 document.getElementById('show-battleship').addEventListener('click', function(e) {
@@ -1222,8 +1238,6 @@ document.getElementById('restart-snake').addEventListener('click', () => {
     gameLoop();
 });
 
-// Запуск игры при загрузке страницы
-gameLoop();
 const minesweeperCanvas = document.getElementById('minesweeper');
 const minesweeperCtx = minesweeperCanvas.getContext('2d');
 const gridSize = 10;
