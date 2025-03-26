@@ -1122,6 +1122,18 @@ document.getElementById('show-minesweeper').addEventListener('click', function(e
     document.getElementById('minesweeper-game').style.display = 'block';
     document.getElementById('snake-game').style.display = 'none';
     document.getElementById('battleship-game').style.display = 'none';
+    // Перерисовываем сапера при показе
+    drawMinesweeper();
+});
+
+document.getElementById('show-snake').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('snake-game').style.display = 'block';
+    document.getElementById('minesweeper-game').style.display = 'none';
+    document.getElementById('battleship-game').style.display = 'none';
+    // Инициализируем змейку при показе
+    initGame();
+    gameLoop();
 });
 
 document.getElementById('show-battleship').addEventListener('click', function(e) {
@@ -1129,18 +1141,9 @@ document.getElementById('show-battleship').addEventListener('click', function(e)
     document.getElementById('battleship-game').style.display = 'block';
     document.getElementById('minesweeper-game').style.display = 'none';
     document.getElementById('snake-game').style.display = 'none';
+    // Инициализируем морской бой при показе
     initBattleship();
 });
-
-document.getElementById('start-battleship').addEventListener('click', startGame);
-document.getElementById('restart-battleship').addEventListener('click', initBattleship);
-document.getElementById('change-orientation').addEventListener('click', function() {
-    battleshipGame.currentOrientation = 
-        battleshipGame.currentOrientation === 'horizontal' ? 'vertical' : 'horizontal';
-    updateOrientationButton();
-    renderBoards();
-});
-
 const snakeCanvas = document.getElementById('snake');
 const snakeCtx = snakeCanvas.getContext('2d');
 
