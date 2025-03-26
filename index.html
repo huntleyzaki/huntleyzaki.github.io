@@ -1155,6 +1155,8 @@ let food = { x: 15, y: 15 };
 let dx = 0;
 let dy = 0;
 let gameOver = false;
+let canChangeDirection = true; // Флаг, разрешающий изменение направления
+let lastDirectionChangeTime = 0; // Время последнего изменения направления
 
 function drawSnake() {
     snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
@@ -1209,6 +1211,18 @@ function gameLoop() {
 }
 
 document.addEventListener('keydown', (e) => {
+    const now = Date.now();
+    if (!canChangeDirection && now - lastDirectionChangeTime < 150) {
+        return; // Игнорируем нажатие, если не прошло 150 мс
+    }
+    
+    canChangeDirection = false;
+    lastDirectionChangeTime = now;
+    
+    setTimeout(() => {
+        canChangeDirection = true;
+    }, 150);
+
     switch (e.code) {
         case 'ArrowUp':
         case 'KeyW':
