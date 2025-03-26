@@ -1212,8 +1212,8 @@ function gameLoop() {
 
 document.addEventListener('keydown', (e) => {
     const now = Date.now();
-    if (!canChangeDirection && now - lastDirectionChangeTime < 150) {
-        return; // Игнорируем нажатие, если не прошло 150 мс
+    if (!canChangeDirection && now - lastDirectionChangeTime < 500) {
+        return;
     }
     
     canChangeDirection = false;
