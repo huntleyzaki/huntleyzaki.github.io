@@ -1212,7 +1212,7 @@ function gameLoop() {
 
 document.addEventListener('keydown', (e) => {
     const now = Date.now();
-    if (!canChangeDirection && now - lastDirectionChangeTime < 300) {
+    if (!canChangeDirection && now - lastDirectionChangeTime < 180) {
         return;
     }
     
@@ -1221,7 +1221,7 @@ document.addEventListener('keydown', (e) => {
     
     setTimeout(() => {
         canChangeDirection = true;
-    }, 300);
+    }, 180);
 
     switch (e.code) {
         case 'ArrowUp':
