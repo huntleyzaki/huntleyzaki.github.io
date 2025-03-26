@@ -1124,29 +1124,6 @@ document.getElementById('show-minesweeper').addEventListener('click', function(e
     document.getElementById('battleship-game').style.display = 'none';
 });
 
-document.getElementById('show-snake').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('snake-game').style.display = 'block';
-    document.getElementById('minesweeper-game').style.display = 'none';
-    document.getElementById('battleship-game').style.display = 'none';
-    
-    // Инициализация игры при каждом показе
-    snake = [{ x: 10, y: 10 }];
-    food = { x: 15, y: 15 };
-    dx = 1; // Начальное направление - вправо
-    dy = 0;
-    gameOver = false;
-    
-    // Очистка canvas и перерисовка
-    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-    drawSnake();
-    
-    // Запуск игрового цикла только если он еще не запущен
-    if (!gameOver) {
-        gameLoop();
-    }
-});
-
 document.getElementById('show-battleship').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('battleship-game').style.display = 'block';
@@ -1169,7 +1146,7 @@ const snakeCtx = snakeCanvas.getContext('2d');
 let snake = [{ x: 10, y: 10 }];
 let food = { x: 15, y: 15 };
 let dx = 1; // Начальное направление - вправо
-let dy = 0; // (можно изменить на 0 и 1 для движения вниз)
+let dy = 0;
 let gameOver = false;
 const gameSpeed = 150; // Скорость игры (мс)
 
@@ -1208,6 +1185,10 @@ function moveSnake() {
 }
 
 function gameLoop() {
+    if (document.getElementById('snake-game').style.display === 'none') {
+        return; // Остановить игру, если она скрыта
+    }
+    
     moveSnake();
     drawSnake();
     if (!gameOver) {
@@ -1217,6 +1198,8 @@ function gameLoop() {
 
 // Управление с защитой от резких поворотов
 document.addEventListener('keydown', (e) => {
+    if (document.getElementById('snake-game').style.display === 'none') return;
+    
     const key = e.code;
     if ((key === 'ArrowUp' || key === 'KeyW') && dy === 0) {
         dx = 0; dy = -1;
@@ -1232,9 +1215,28 @@ document.addEventListener('keydown', (e) => {
 document.getElementById('restart-snake').addEventListener('click', () => {
     snake = [{ x: 10, y: 10 }];
     food = { x: 15, y: 15 };
-    dx = 1; // Важно установить начальное направление!
+    dx = 1;
     dy = 0;
     gameOver = false;
+    drawSnake();
+    gameLoop();
+});
+
+// Обработчик кнопки "Показать Змейку"
+document.getElementById('show-snake').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('snake-game').style.display = 'block';
+    document.getElementById('minesweeper-game').style.display = 'none';
+    document.getElementById('battleship-game').style.display = 'none';
+    
+    // Инициализация игры
+    snake = [{ x: 10, y: 10 }];
+    food = { x: 15, y: 15 };
+    dx = 1;
+    dy = 0;
+    gameOver = false;
+    
+    drawSnake();
     gameLoop();
 });
 
