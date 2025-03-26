@@ -1143,83 +1143,164 @@ document.getElementById('change-orientation').addEventListener('click', function
 
 const snakeCanvas = document.getElementById('snake');
 const snakeCtx = snakeCanvas.getContext('2d');
-let snake = [{ x: 10, y: 10 }];
-let food = { x: 15, y: 15 };
-let dx = 1; // Начальное направление - вправо
-let dy = 0;
-let gameOver = false;
-const gameSpeed = 150; // Скорость игры (мс)
 
-function drawSnake() {
-    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-    snakeCtx.fillStyle = '#00ff88';
-    snake.forEach(segment => snakeCtx.fillRect(segment.x * 10, segment.y * 10, 10, 10));
-    snakeCtx.fillStyle = '#ff006e';
-    snakeCtx.fillRect(food.x * 10, food.y * 10, 10, 10);
+// Настройки игры
+const cellSize = 10;
+const gameSpeed = 150; // Скорость обновления (мс)
+const directionChangeDelay = 50; // Задержка между сменами направления (мс)
+
+// Состояние игры
+let snake = [];
+let food = {};
+let dx = 0;
+let dy = 0;
+let nextDx = 0;
+let nextDy = 0;
+let gameOver = true; // Игра начинается в неактивном состоянии
+let gameRunning = false;
+let lastDirectionChangeTime = 0;
+
+// Инициализация игры
+function initGame() {
+    snake = [
+        {x: 10, y: 10},
+        {x: 9, y: 10},
+        {x: 8, y: 10}
+    ];
+    placeFood();
+    dx = 0;
+    dy = 0;
+    nextDx = 0;
+    nextDy = 0;
+    gameOver = false;
+    gameRunning = false; // Игра не начнется, пока не нажмут клавишу
+    drawSnake();
 }
 
+// Размещение еды
+function placeFood() {
+    const maxPos = snakeCanvas.width / cellSize;
+    let placed = false;
+    
+    while (!placed) {
+        food = {
+            x: Math.floor(Math.random() * maxPos),
+            y: Math.floor(Math.random() * maxPos)
+        };
+        
+        placed = !snake.some(segment => segment.x === food.x && segment.y === food.y);
+    }
+}
+
+// Отрисовка игры
+function drawSnake() {
+    snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+    
+    // Рисуем змейку
+    snakeCtx.fillStyle = '#00ff88';
+    snake.forEach(segment => {
+        snakeCtx.fillRect(segment.x * cellSize, segment.y * cellSize, cellSize, cellSize);
+    });
+    
+    // Рисуем еду
+    snakeCtx.fillStyle = '#ff006e';
+    snakeCtx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
+    
+    // Если игра не началась - показываем подсказку
+    if (!gameRunning && !gameOver) {
+        snakeCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        snakeCtx.fillStyle = 'white';
+        snakeCtx.font = '16px Arial';
+        snakeCtx.textAlign = 'center';
+        snakeCtx.fillText('Нажмите W/A/S/D для начала игры', snakeCanvas.width/2, snakeCanvas.height/2);
+    }
+}
+
+// Движение змейки
 function moveSnake() {
-    if (gameOver) return;
-
-    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-
+    if (gameOver || !gameRunning) return;
+    
+    // Применяем следующее направление
+    dx = nextDx;
+    dy = nextDy;
+    
+    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+    
     // Проверка столкновений
-    if (head.x < 0 || head.x >= snakeCanvas.width/10 || 
-        head.y < 0 || head.y >= snakeCanvas.height/10 ||
+    if (head.x < 0 || head.x >= snakeCanvas.width/cellSize || 
+        head.y < 0 || head.y >= snakeCanvas.height/cellSize ||
         snake.some((segment, index) => index > 0 && segment.x === head.x && segment.y === head.y)) {
-        gameOver = true;
-        alert('Game Over!');
+        endGame();
         return;
     }
-
+    
     snake.unshift(head);
     
+    // Проверка съедания еды
     if (head.x === food.x && head.y === food.y) {
-        food = {
-            x: Math.floor(Math.random() * (snakeCanvas.width/10)),
-            y: Math.floor(Math.random() * (snakeCanvas.height/10))
-        };
+        placeFood();
+        checkSnakeAchievements(snake.length);
     } else {
         snake.pop();
     }
 }
 
+// Окончание игры
+function endGame() {
+    gameOver = true;
+    stats.gamesPlayed++;
+    updateStats();
+    alert('Game Over!');
+}
+
+// Игровой цикл
 function gameLoop() {
     if (document.getElementById('snake-game').style.display === 'none') {
-        return; // Остановить игру, если она скрыта
+        return; // Остановить, если игра скрыта
     }
     
     moveSnake();
     drawSnake();
+    
     if (!gameOver) {
         setTimeout(gameLoop, gameSpeed);
     }
 }
 
-// Управление с защитой от резких поворотов
+// Обработка клавиш
 document.addEventListener('keydown', (e) => {
     if (document.getElementById('snake-game').style.display === 'none') return;
     
+    const now = Date.now();
+    if (now - lastDirectionChangeTime < directionChangeDelay) return;
+    
     const key = e.code;
-    if ((key === 'ArrowUp' || key === 'KeyW') && dy === 0) {
-        dx = 0; dy = -1;
-    } else if ((key === 'ArrowDown' || key === 'KeyS') && dy === 0) {
-        dx = 0; dy = 1;
-    } else if ((key === 'ArrowLeft' || key === 'KeyA') && dx === 0) {
-        dx = -1; dy = 0;
-    } else if ((key === 'ArrowRight' || key === 'KeyD') && dx === 0) {
-        dx = 1; dy = 0;
+    let newDx = dx;
+    let newDy = dy;
+    
+    // Если игра еще не началась - запускаем при первом нажатии
+    if (!gameRunning && !gameOver) {
+        gameRunning = true;
     }
-});
-
-document.getElementById('restart-snake').addEventListener('click', () => {
-    snake = [{ x: 10, y: 10 }];
-    food = { x: 15, y: 15 };
-    dx = 1;
-    dy = 0;
-    gameOver = false;
-    drawSnake();
-    gameLoop();
+    
+    // Определение направления
+    if ((key === 'ArrowUp' || key === 'KeyW') && dy === 0) {
+        newDx = 0; newDy = -1;
+    } else if ((key === 'ArrowDown' || key === 'KeyS') && dy === 0) {
+        newDx = 0; newDy = 1;
+    } else if ((key === 'ArrowLeft' || key === 'KeyA') && dx === 0) {
+        newDx = -1; newDy = 0;
+    } else if ((key === 'ArrowRight' || key === 'KeyD') && dx === 0) {
+        newDx = 1; newDy = 0;
+    } else {
+        return; // Невалидное направление
+    }
+    
+    // Запоминаем следующее направление
+    nextDx = newDx;
+    nextDy = newDy;
+    lastDirectionChangeTime = now;
 });
 
 // Обработчик кнопки "Показать Змейку"
@@ -1229,14 +1310,13 @@ document.getElementById('show-snake').addEventListener('click', function(e) {
     document.getElementById('minesweeper-game').style.display = 'none';
     document.getElementById('battleship-game').style.display = 'none';
     
-    // Инициализация игры
-    snake = [{ x: 10, y: 10 }];
-    food = { x: 15, y: 15 };
-    dx = 1;
-    dy = 0;
-    gameOver = false;
-    
-    drawSnake();
+    initGame();
+    gameLoop();
+});
+
+// Обработчик кнопки "Перезапустить Змейку"
+document.getElementById('restart-snake').addEventListener('click', function() {
+    initGame();
     gameLoop();
 });
 
