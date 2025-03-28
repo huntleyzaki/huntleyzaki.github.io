@@ -1189,18 +1189,20 @@ document.getElementById('show-snake').addEventListener('click', () => {
     });
 });
 
-document.getElementById('show-minesweeper').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('minesweeper-game').style.display = 'block';
-    document.getElementById('snake-game').style.display = 'none';
-    document.getElementById('battleship-game').style.display = 'none';
-});
-
 document.getElementById('show-snake').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('snake-game').style.display = 'block';
     document.getElementById('minesweeper-game').style.display = 'none';
     document.getElementById('battleship-game').style.display = 'none';
+    isSnakeGameActive = true;
+});
+
+document.getElementById('show-minesweeper').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('minesweeper-game').style.display = 'block';
+    document.getElementById('snake-game').style.display = 'none';
+    document.getElementById('battleship-game').style.display = 'none';
+    isSnakeGameActive = false;
 });
 
 document.getElementById('show-battleship').addEventListener('click', function(e) {
@@ -1208,6 +1210,7 @@ document.getElementById('show-battleship').addEventListener('click', function(e)
     document.getElementById('battleship-game').style.display = 'block';
     document.getElementById('minesweeper-game').style.display = 'none';
     document.getElementById('snake-game').style.display = 'none';
+    isSnakeGameActive = false;
     initBattleship();
 });
 
@@ -1322,6 +1325,7 @@ document.getElementById('restart-snake').addEventListener('click', () => {
     dx = 0;
     dy = 0;
     gameOver = false;
+    isSnakeGameActive = true;
     gameLoop();
 });
 
