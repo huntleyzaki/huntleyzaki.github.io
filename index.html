@@ -175,18 +175,26 @@
         margin-top: 1.5rem;
     }
 
-    .skill-item {
-        background: rgba(24, 24, 24, 0.8);
-        padding: 1.5rem;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-    }
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(24, 24, 24, 0.8);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
 
-    .skill-item:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(255, 0, 110, 0.2);
-    }
+.skill-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 0, 110, 0.2);
+}
+
+.skill-item i {
+    margin-bottom: 0.5rem;
+}
 
     .social-links {
         display: flex;
@@ -939,43 +947,51 @@
             </div>
         </section>
 
-        <section class="skills">
-            <h2>Навыки</h2>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <h3>HTML</h3>
-                    <p>Веб-разработка</p>
-                </div>
-                <div class="skill-item">
-                    <h3>CSS</h3>
-                    <p>Веб-разработка</p>
-                </div>
-                
-                <div class="skill-item">
-                    <h3>JavaScript</h3>
-                    <p>Веб-разработка</p>
-                </div>
-                
-                <div class="skill-item">
-                    <h3>Python</h3>
-                    <p>Программирование</p>
-                </div>
-                <div class="skill-item">
-                    <h3>С#</h3>
-                    <p>Программирование</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Креативность</h3>
-                <p>Создание серверов</p>
-            </div>
-            <div class="skill-item">
-                <h3>Опыт с RPC</h3>
-                <p>Кастомный RPC для Discord</p>
-            </div>
-            <div class="skill-item">
-                <h3>Скоро...</h3>
-            </div>
+<section class="skills">
+    <h2>Навыки</h2>
+    <div class="skills-grid">
+        <div class="skill-item">
+            <i class="fab fa-html5" style="color: #E34F26; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>HTML</h3>
+            <p>Веб-разработка</p>
         </div>
+        <div class="skill-item">
+            <i class="fab fa-css3-alt" style="color: #1572B6; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>CSS</h3>
+            <p>Веб-разработка</p>
+        </div>
+        
+        <div class="skill-item">
+            <i class="fab fa-js" style="color: #F7DF1E; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>JavaScript</h3>
+            <p>Веб-разработка</p>
+        </div>
+        
+        <div class="skill-item">
+            <i class="fab fa-python" style="color: #3776AB; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>Python</h3>
+            <p>Программирование</p>
+        </div>
+        <div class="skill-item">
+            <i class="fas fa-code" style="color: #239120; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>C#</h3>
+            <p>Программирование</p>
+        </div>
+        <div class="skill-item">
+            <i class="fas fa-lightbulb" style="color: #FFD43B; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>Креативность</h3>
+            <p>Создание серверов</p>
+        </div>
+        <div class="skill-item">
+            <i class="fab fa-discord" style="color: #5865F2; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>Опыт с RPC</h3>
+            <p>Кастомный RPC для Discord</p>
+        </div>
+        <div class="skill-item">
+            <i class="fas fa-hourglass-half" style="color: #ff006e; font-size: 24px; margin-bottom: 10px;"></i>
+            <h3>Скоро...</h3>
+        </div>
+    </div>
     </section>
 
     <div class="social-links">
