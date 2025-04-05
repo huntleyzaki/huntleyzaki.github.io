@@ -560,6 +560,25 @@
         right: 1rem;
     }
 
+    #gif-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.gif-particle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    will-change: transform;
+}
     footer {
         text-align: center;
         padding: 1.5rem 0;
@@ -1043,66 +1062,89 @@
         <p>© 2025 huntleyzaki.dev. Все права защищены.</p>
     </footer>
 <script>
-const canvas = document.getElementById('dots-canvas');
-const ctx = canvas.getContext('2d');
-let dots = [];
+// Удаляем старый код с точками и добавляем новый с гифками
+const gifContainer = document.getElementById('gif-container');
+const gifUrls = [
+    'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExN255ZHpnbjhzcDc1ajV4Mm5odTI3NDhidTN6dm40d3hmaTRoN2h5byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ku8obSrHdy4IitzkAI/giphy.gif', // пример гифки 1
+];
+const particles = [];
+const particleCount = 20; // Количество гифок
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-class Dot {
-    constructor() {
-        this.reset();
-        this.alpha = Math.random() * 0.6 + 0.4;
-        this.size = Math.random() * 1 + 2;
-        this.speedX = (Math.random() - 0.5) * 1.5;
-        this.speedY = (Math.random() - 0.5) * 1.5;
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.angle = Math.random() * Math.PI * 2;
-    }
-
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-    }
-
-    update() {
-        this.x += Math.cos(this.angle) * this.speedX;
-        this.y += Math.sin(this.angle) * this.speedY;
-
-        if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
-            this.reset();
-        }
-    }
-
-    draw() {
-        ctx.fillStyle = `rgba(255, 0, 110, ${this.alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+// Создаем частицы-гифки
+function createParticles() {
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'gif-particle';
+        
+        // Выбираем случайную гифку
+        const randomGif = gifUrls[Math.floor(Math.random() * gifUrls.length)];
+        particle.style.backgroundImage = `url(${randomGif})`;
+        
+        // Начальная позиция
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Скорость и направление
+        particle.speedX = (Math.random() - 0.5) * 2;
+        particle.speedY = (Math.random() - 0.5) * 2;
+        
+        // Размер
+        const size = Math.random() * 20 + 10;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Прозрачность
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        
+        gifContainer.appendChild(particle);
+        particles.push(particle);
     }
 }
 
-function initDots() {
-    resizeCanvas();
-    dots = Array(300).fill().map(() => new Dot());
-    window.addEventListener('resize', resizeCanvas);
-    animateDots();
-}
-
-function animateDots() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    dots.forEach(dot => {
-        dot.update();
-        dot.draw();
+// Анимация частиц
+function animateParticles() {
+    particles.forEach(particle => {
+        let x = parseFloat(particle.style.left);
+        let y = parseFloat(particle.style.top);
+        
+        x += particle.speedX;
+        y += particle.speedY;
+        
+        // Если гифка выходит за границы экрана - возвращаем ее с другой стороны
+        if (x > window.innerWidth) x = -30;
+        if (x < -30) x = window.innerWidth;
+        if (y > window.innerHeight) y = -30;
+        if (y < -30) y = window.innerHeight;
+        
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
     });
-    requestAnimationFrame(animateDots);
+    
+    requestAnimationFrame(animateParticles);
 }
 
-initDots();
+// Инициализация
+createParticles();
+animateParticles();
+
+// Реакция на движение мыши
+document.addEventListener('mousemove', (e) => {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    document.querySelector('.parallax-layer').style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+    
+    // Гифки слегка реагируют на движение мыши
+    particles.forEach(particle => {
+        const dx = e.clientX - parseFloat(particle.style.left);
+        const dy = e.clientY - parseFloat(particle.style.top);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 200) {
+            particle.speedX += dx * 0.0001;
+            particle.speedY += dy * 0.0001;
+        }
+    });
+});
 
 document.addEventListener('mousemove', (e) => {
     const x = e.clientX / window.innerWidth - 0.5;
