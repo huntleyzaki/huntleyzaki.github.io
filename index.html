@@ -830,9 +830,29 @@
                 right: 10px;
             }
         }
+            #gif-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.gif-particle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    will-change: transform;
+}
     </style>
 </head>
 <body>
+    <div id="gif-container"></div>
     <button id="toggle-player">🎵 Музыкальный плеер</button>
     
     <div class="music-player" id="music-player">
@@ -1043,66 +1063,6 @@
         <p>© 2025 huntleyzaki.dev. Все права защищены.</p>
     </footer>
 <script>
-const canvas = document.getElementById('dots-canvas');
-const ctx = canvas.getContext('2d');
-let dots = [];
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-class Dot {
-    constructor() {
-        this.reset();
-        this.alpha = Math.random() * 0.6 + 0.4;
-        this.size = Math.random() * 1 + 2;
-        this.speedX = (Math.random() - 0.5) * 1.5;
-        this.speedY = (Math.random() - 0.5) * 1.5;
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.angle = Math.random() * Math.PI * 2;
-    }
-
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-    }
-
-    update() {
-        this.x += Math.cos(this.angle) * this.speedX;
-        this.y += Math.sin(this.angle) * this.speedY;
-
-        if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
-            this.reset();
-        }
-    }
-
-    draw() {
-        ctx.fillStyle = `rgba(255, 0, 110, ${this.alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
-
-function initDots() {
-    resizeCanvas();
-    dots = Array(300).fill().map(() => new Dot());
-    window.addEventListener('resize', resizeCanvas);
-    animateDots();
-}
-
-function animateDots() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    dots.forEach(dot => {
-        dot.update();
-        dot.draw();
-    });
-    requestAnimationFrame(animateDots);
-}
-
-initDots();
 
 document.addEventListener('mousemove', (e) => {
     const x = e.clientX / window.innerWidth - 0.5;
@@ -1491,14 +1451,14 @@ function drawMinesweeper() {
 function getNumberColor(num) {
     const colors = [
         '',
-        '#0000ff', // 1 - синий
-        '#008000', // 2 - зеленый
-        '#ff0000', // 3 - красный
-        '#000080', // 4 - темно-синий
-        '#800000', // 5 - темно-красный
-        '#008080', // 6 - бирюзовый
-        '#000000', // 7 - черный
-        '#808080'  // 8 - серый
+        '#0000ff',
+        '#008000',
+        '#ff0000',
+        '#000080',
+        '#800000',
+        '#008080',
+        '#000000',
+        '#808080' 
     ];
     return colors[num];
 }
@@ -2060,19 +2020,16 @@ let stats = JSON.parse(localStorage.getItem('stats')) || {
     achievements: []
 };
 
-// Отправляем событие в Google Analytics
 gtag('event', 'page_view', {
     'page_title': 'huntleyzaki.dev',
     'page_location': window.location.href
 });
 
-// Обновляем отображение (показываем локальные данные)
 document.getElementById('visitors').textContent = stats.visitors;
 document.getElementById('games-played').textContent = stats.gamesPlayed;
 document.getElementById('snake-record').textContent = stats.snakeRecord;
 document.getElementById('battleship-wins').textContent = stats.battleshipWins || 0;
 
-// Проверяем достижения
 if (stats.visitors === 1 && !stats.achievements.includes('first_visit')) {
     stats.achievements.push('first_visit');
     showAchievementNotification('Первый визит');
@@ -2168,10 +2125,8 @@ updateStats();
         const playlistEl = document.getElementById('playlist');
         const searchInput = document.getElementById('search-input');
 
-        // YouTube API ключ
         const YOUTUBE_API_KEY = 'AIzaSyBQOvu1XKazEQP3oAqdNco6DnYU0fi9Bpk';
 
-        // Состояние плеера
         let playerState = {
             currentTrackIndex: -1,
             tracks: [],
@@ -2183,21 +2138,17 @@ updateStats();
             apiReady: false
         };
 
-        // Инициализация плеера
         function initPlayer() {
-            // Создаем iframe для YouTube плеера (скрытый)
             const playerDiv = document.createElement('div');
             playerDiv.id = 'youtube-player';
             playerDiv.style.display = 'none';
             document.body.appendChild(playerDiv);
 
-            // Загрузка YouTube IFrame API
             const tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
             const firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-            // Обработчики событий
             togglePlayerBtn.addEventListener('click', togglePlayer);
             playBtn.addEventListener('click', togglePlay);
             prevBtn.addEventListener('click', playPrevTrack);
@@ -2205,11 +2156,9 @@ updateStats();
             progressContainer.addEventListener('click', setProgress);
             searchInput.addEventListener('input', handleSearchInput);
 
-            // Загрузка плейлиста по умолчанию
             searchTracks('КруЭлла Тампоны! (S-Teklorez Remix)');
         }
 
-        // Функция для создания YouTube плеера
         function onYouTubeIframeAPIReady() {
             playerState.apiReady = true;
             playerState.player = new YT.Player('youtube-player', {
@@ -2231,8 +2180,7 @@ updateStats();
 
         function onPlayerReady(event) {
             playerState.playerReady = true;
-            
-            // Если треки уже загружены, воспроизводим первый
+
             if (playerState.tracks.length > 0 && playerState.currentTrackIndex === -1) {
                 playTrack(0);
             }
@@ -2255,7 +2203,6 @@ updateStats();
             }
         }
 
-        // Поиск треков на YouTube
         function searchTracks(query) {
             if (!query) return;
             
@@ -2272,15 +2219,13 @@ updateStats();
                     }));
                     
                     renderPlaylist();
-                    
-                    // Автовоспроизведение первого трека
+
                     if (playerState.currentTrackIndex === -1 && playerState.tracks.length > 0) {
                         playTrack(0);
                     }
                 });
         }
 
-        // Обработчик ввода поиска
         function handleSearchInput(e) {
             clearTimeout(playerState.searchTimeout);
             playerState.searchTimeout = setTimeout(() => {
@@ -2288,24 +2233,20 @@ updateStats();
             }, 500);
         }
 
-        // Воспроизведение трека по индексу
         function playTrack(index) {
             if (index < 0 || index >= playerState.tracks.length) return;
             
             playerState.currentTrackIndex = index;
             const track = playerState.tracks[index];
-            
-            // Обновляем информацию о треке
+
             trackTitle.textContent = track.title;
             trackArtist.textContent = track.artist;
-            
-            // Выделяем текущий трек в плейлисте
+
             const playlistItems = document.querySelectorAll('.playlist-item');
             playlistItems.forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
-            
-            // Загружаем и воспроизводим трек
+
             if (playerState.player && playerState.player.loadVideoById) {
                 playerState.player.loadVideoById(track.id);
                 playerState.player.playVideo();
@@ -2314,7 +2255,6 @@ updateStats();
             }
         }
 
-        // Переключение воспроизведения/паузы
         function togglePlay() {
             if (!playerState.player || playerState.currentTrackIndex === -1) return;
             
@@ -2329,7 +2269,6 @@ updateStats();
             }
         }
 
-        // Следующий трек
         function playNextTrack() {
             if (playerState.tracks.length === 0) return;
             
@@ -2337,7 +2276,6 @@ updateStats();
             playTrack(nextIndex);
         }
 
-        // Предыдущий трек
         function playPrevTrack() {
             if (playerState.tracks.length === 0) return;
             
@@ -2345,19 +2283,16 @@ updateStats();
             playTrack(prevIndex);
         }
 
-        // Обновление прогресс-бара
         function updateProgressBar() {
             if (!playerState.player || !playerState.isPlaying) return;
             
             const duration = playerState.player.getDuration();
             const currentTime = playerState.player.getCurrentTime();
-            
-            // Обновляем время
+
             if (!isNaN(duration)) {
                 currentTimeEl.textContent = formatTime(currentTime);
                 durationEl.textContent = formatTime(duration);
-                
-                // Обновляем прогресс-бар
+
                 const progressPercent = (currentTime / duration) * 100;
                 progressBar.style.width = `${progressPercent}%`;
             }
@@ -2365,7 +2300,6 @@ updateStats();
             requestAnimationFrame(updateProgressBar);
         }
 
-        // Установка прогресса по клику
         function setProgress(e) {
             if (!playerState.player) return;
             
@@ -2375,7 +2309,6 @@ updateStats();
             playerState.player.seekTo((clickX / width) * duration);
         }
 
-        // Форматирование времени
         function formatTime(seconds) {
             if (isNaN(seconds)) return "0:00";
             
@@ -2384,7 +2317,6 @@ updateStats();
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // Отрисовка плейлиста
         function renderPlaylist() {
             playlistEl.innerHTML = '';
             
@@ -2397,13 +2329,86 @@ updateStats();
             });
         }
 
-        // Переключение видимости плеера
         function togglePlayer() {
             musicPlayer.classList.toggle('active');
         }
 
-        // Инициализируем плеер при загрузке страницы
         window.addEventListener('DOMContentLoaded', initPlayer);
+                const gifContainer = document.getElementById('gif-container');
+        const gifUrls = [
+            'https://i.gifer.com/3OvW9.gif',
+        ];
+        const particles = [];
+        const particleCount = 200;
+
+function createParticles() {
+    const cols = Math.ceil(Math.sqrt(particleCount));
+    const rows = Math.ceil(particleCount / cols);
+    const cellWidth = window.innerWidth / cols;
+    const cellHeight = window.innerHeight / rows;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'gif-particle';
+
+        const randomGif = gifUrls[Math.floor(Math.random() * gifUrls.length)];
+        particle.style.backgroundImage = `url(${randomGif})`;
+
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = col * cellWidth + Math.random() * cellWidth * 0.8;
+        const y = row * cellHeight + Math.random() * cellHeight * 0.8;
+        
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+
+        particle.speedX = (Math.random() - 0.5) * 0.5;
+        particle.speedY = (Math.random() - 0.5) * 0.5;
+
+        const size = Math.random() * 20 + 15;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        gifContainer.appendChild(particle);
+        particles.push(particle);
+    }
+}
+
+function animateParticles() {
+    particles.forEach(particle => {
+        let x = parseFloat(particle.style.left);
+        let y = parseFloat(particle.style.top);
+        
+        x += particle.speedX;
+        y += particle.speedY;
+
+        if (x > window.innerWidth) x = -30;
+        if (x < -30) x = window.innerWidth;
+        if (y > window.innerHeight) y = -30;
+        if (y < -30) y = window.innerHeight;
+        
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+    });
+    
+    requestAnimationFrame(animateParticles);
+}
+
+createParticles();
+animateParticles();
+
+document.addEventListener('mousemove', (e) => {
+    particles.forEach(particle => {
+        const dx = e.clientX - parseFloat(particle.style.left);
+        const dy = e.clientY - parseFloat(particle.style.top);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 200) {
+            particle.speedX += dx * 0.0001;
+            particle.speedY += dy * 0.0001;
+        }
+    });
+});
 </script>
 </body>
 </html>
