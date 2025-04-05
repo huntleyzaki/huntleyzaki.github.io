@@ -830,29 +830,9 @@
                 right: 10px;
             }
         }
-            #gif-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.gif-particle {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    will-change: transform;
-}
     </style>
 </head>
 <body>
-    <div id="gif-container"></div>
     <button id="toggle-player">🎵 Музыкальный плеер</button>
     
     <div class="music-player" id="music-player">
@@ -1063,6 +1043,66 @@
         <p>© 2025 huntleyzaki.dev. Все права защищены.</p>
     </footer>
 <script>
+const canvas = document.getElementById('dots-canvas');
+const ctx = canvas.getContext('2d');
+let dots = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+class Dot {
+    constructor() {
+        this.reset();
+        this.alpha = Math.random() * 0.6 + 0.4;
+        this.size = Math.random() * 1 + 2;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.angle = Math.random() * Math.PI * 2;
+    }
+
+    reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+    }
+
+    update() {
+        this.x += Math.cos(this.angle) * this.speedX;
+        this.y += Math.sin(this.angle) * this.speedY;
+
+        if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
+            this.reset();
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = `rgba(255, 0, 110, ${this.alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function initDots() {
+    resizeCanvas();
+    dots = Array(300).fill().map(() => new Dot());
+    window.addEventListener('resize', resizeCanvas);
+    animateDots();
+}
+
+function animateDots() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(dot => {
+        dot.update();
+        dot.draw();
+    });
+    requestAnimationFrame(animateDots);
+}
+
+initDots();
 
 document.addEventListener('mousemove', (e) => {
     const x = e.clientX / window.innerWidth - 0.5;
@@ -2364,90 +2404,6 @@ updateStats();
 
         // Инициализируем плеер при загрузке страницы
         window.addEventListener('DOMContentLoaded', initPlayer);
-                const gifContainer = document.getElementById('gif-container');
-        const gifUrls = [
-            'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExN255ZHpnbjhzcDc1ajV4Mm5odTI3NDhidTN6dm40d3hmaTRoN2h5byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ku8obSrHdy4IitzkAI/giphy.gif',       // маленькая звезда
-        ];
-        const particles = [];
-        const particleCount = 200; // Количество гифок
-
-function createParticles() {
-    // Рассчитываем равномерное распределение
-    const cols = Math.ceil(Math.sqrt(particleCount));
-    const rows = Math.ceil(particleCount / cols);
-    const cellWidth = window.innerWidth / cols;
-    const cellHeight = window.innerHeight / rows;
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'gif-particle';
-        
-        // Выбираем случайную гифку
-        const randomGif = gifUrls[Math.floor(Math.random() * gifUrls.length)];
-        particle.style.backgroundImage = `url(${randomGif})`;
-        
-        // Равномерное распределение по экрану
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        const x = col * cellWidth + Math.random() * cellWidth * 0.8;
-        const y = row * cellHeight + Math.random() * cellHeight * 0.8;
-        
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-        
-        // Скорость и направление
-        particle.speedX = (Math.random() - 0.5) * 0.5;
-        particle.speedY = (Math.random() - 0.5) * 0.5;
-        
-        // Размер
-        const size = Math.random() * 20 + 15;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        
-        gifContainer.appendChild(particle);
-        particles.push(particle);
-    }
-}
-
-// Остальной код анимации остается без изменений
-function animateParticles() {
-    particles.forEach(particle => {
-        let x = parseFloat(particle.style.left);
-        let y = parseFloat(particle.style.top);
-        
-        x += particle.speedX;
-        y += particle.speedY;
-        
-        // Если гифка выходит за границы - появляется с другой стороны
-        if (x > window.innerWidth) x = -30;
-        if (x < -30) x = window.innerWidth;
-        if (y > window.innerHeight) y = -30;
-        if (y < -30) y = window.innerHeight;
-        
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-    });
-    
-    requestAnimationFrame(animateParticles);
-}
-
-// Инициализация
-createParticles();
-animateParticles();
-
-// Реакция на движение мыши
-document.addEventListener('mousemove', (e) => {
-    particles.forEach(particle => {
-        const dx = e.clientX - parseFloat(particle.style.left);
-        const dy = e.clientY - parseFloat(particle.style.top);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 200) {
-            particle.speedX += dx * 0.0001;
-            particle.speedY += dy * 0.0001;
-        }
-    });
-});
 </script>
 </body>
 </html>
